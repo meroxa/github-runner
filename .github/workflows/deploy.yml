@@ -77,7 +77,7 @@ jobs:
     - name: Copy Dockerfiles
       run: |
         cp Dockerfile Xenial.dockerfile
-        sed -i'' 's/FROM.*ubuntu:latest/FROM ubuntu:xenial/; s/ubuntu18/ubuntu16/' BaseXenial.dockerfile
+        sed -i'' 's/FROM.*ubuntu:latest/FROM ubuntu:xenial/; s/ubuntu18/ubuntu16/' Xenial.dockerfile
     - name: Set up Docker Buildx
       id: buildx
       uses: crazy-max/ghaction-docker-buildx@master
