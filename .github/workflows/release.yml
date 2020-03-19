@@ -30,7 +30,7 @@ jobs:
     - name: Available platforms
       run: echo ${{ steps.buildx.outputs.platforms }}
     - name: Login
-      run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_TOKEN }}
+      run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
     - name: Build
       run: docker buildx build --squash -f Dockerfile -t ${ORG}/github-runner:${TAG}-ubuntu-rolling -t ${ORG}/github-runner:${TAG}-ubuntu-eoan -t ${ORG}/github-runner:${TAG}-ubuntu-19.10 --output "type=image,push=true" --platform linux/amd64,linux/arm/v7,linux/arm64 .
   ubuntu_xenial_tag:
@@ -60,6 +60,6 @@ jobs:
        cp Dockerfile Dockerfile.ubuntu-xenial
        sed -i'' 's/FROM.*/FROM ubuntu:xenial/; s/1804/1604/' Dockerfile.ubuntu-xenial
     - name: Login
-      run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_TOKEN }}
+      run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
     - name: Build
       run: docker buildx build --squash -f Dockerfile.ubuntu-xenial -t ${ORG}/github-runner:${TAG}-ubuntu-xenial -t ${ORG}/github-runner:${TAG}-ubuntu-16.04 --output "type=image,push=true" --platform linux/amd64,linux/arm/v7,linux/arm64 .
