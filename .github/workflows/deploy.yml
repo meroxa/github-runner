@@ -3,8 +3,8 @@ on:
   push:
     paths-ignore:
       - README.md
-      - Ubunte1804-README.md
-      - Ubunte1604-README.md
+      - Ubuntu1804-README.md
+      - Ubuntu1604-README.md
     branches:
       - master
       - develop
@@ -50,7 +50,7 @@ jobs:
     - name: Get the updated README from the docker image
       run: |
         docker create --name=base-github-runner-bionic-${GITHUB_SHA::8} ${ORG}/base-github-runner:latest
-        docker cp base-github-runner-bionic-${GITHUB_SHA::8}:/imagegeneration/metadatafile Ubunte1804-README.md
+        docker cp base-github-runner-bionic-${GITHUB_SHA::8}:/imagegeneration/metadatafile Ubuntu1804-README.md
         docker rm base-github-runner-bionic-${GITHUB_SHA::8}
     - name: Commit files
       run: |
@@ -104,7 +104,7 @@ jobs:
     - name: Get the updated README from the docker image
       run: |
         docker create --name=base-github-runner-${GITHUB_SHA::8} ${ORG}/base-github-runner:ubuntu-xenial
-        docker cp base-github-runner-${GITHUB_SHA::8}:/imagegeneration/metadatafile Ubunte1604-README.md
+        docker cp base-github-runner-${GITHUB_SHA::8}:/imagegeneration/metadatafile Ubuntu1604-README.md
         docker rm base-github-runner-${GITHUB_SHA::8}
     - name: Commit files
       run: |
@@ -118,3 +118,9 @@ jobs:
       with:
         branch: ${{ github.ref }}
         github_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Dispatch "deploy"
+      run: |
+        curl -X POST https://api.github.com/repos/terradatum/github-runner/dispatches \
+          -H 'Accept: application/vnd.github.everest-preview+json' \
+          -H 'Authorization: token ${{ secrets.GITHUB_PUBLIC_PAT }}' \
+          --data '{"event_type": "deploy"}'

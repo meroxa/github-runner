@@ -1,3 +1,0 @@
-[submodule "virtual-environments"]
-	path = virtual-environments
-	url = https://github.com/actions/virtual-environments
