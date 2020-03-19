@@ -1,0 +1,120 @@
+name: GitHub Actions Runner in Docker - Latest
+on:
+  push:
+    paths-ignore:
+      - README.md
+      - Ubunte1804-README.md
+      - Ubunte1604-README.md
+    branches:
+      - master
+      - develop
+
+jobs:
+  ubuntu_bionic_deploy:
+    runs-on: [self-hosted]
+    timeout-minutes: 720
+    steps:
+    - name: Copy Repo Files
+      uses: actions/checkout@master
+      with:
+        fetch-depth: 0
+        submodules: true
+    - name: Get GitHub organization or user
+      run: echo ::set-env name=ORG::$(dirname ${GITHUB_REPOSITORY})
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: crazy-max/ghaction-docker-buildx@master
+      with:
+        version: latest
+    - name: Available platforms
+      run: echo ${{ steps.buildx.outputs.platforms }}
+    - name: Login
+      run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_TOKEN }}
+    - name: Build base-github-runner
+      run: |
+        docker buildx build \
+          -f Dockerfile \
+          --build-arg=BUILDKIT_INLINE_CACHE=1 \
+          --build-arg=BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
+          --build-arg=VCS_REF=${GITHUB_SHA::8} \
+          --build-arg=LSB_RELEASE_DIR=1804 \
+          --build-arg=GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
+          --build-arg=GITHUB_FEED_TOKEN=${{ secrets.GITHUB_PAT }} \
+          -t ${ORG}/base-github-runner:latest \
+          -t ${ORG}/base-github-runner:ubuntu-latest \
+          -t ${ORG}/base-github-runner:ubuntu-bionic \
+          -t ${ORG}/base-github-runner:ubuntu-18.04 \
+          --cache-from=${ORG}/base-github-runner:latest \
+          --output="type=image,push=true" \
+          .
+    - name: Get the updated README from the docker image
+      run: |
+        docker create --name=base-github-runner-bionic-${GITHUB_SHA::8} ${ORG}/base-github-runner:latest
+        docker cp base-github-runner-bionic-${GITHUB_SHA::8}:/imagegeneration/metadatafile Ubunte1804-README.md
+        docker rm base-github-runner-bionic-${GITHUB_SHA::8}
+    - name: Commit files
+      run: |
+        echo ${{ github.ref }}
+        git add .
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -m "ci: Automated build push" -a | exit 0
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+  ubuntu_xenial_deploy:
+    runs-on: [self-hosted]
+    timeout-minutes: 720
+    steps:
+    - name: Copy Repo Files
+      uses: actions/checkout@master
+      with:
+        submodules: true
+    - name: Get GitHub organization or user
+      run: echo ::set-env name=ORG::$(dirname ${GITHUB_REPOSITORY})
+    - name: Copy Dockerfiles
+      run: |
+        cp Dockerfile Xenial.dockerfile
+        sed -i'' 's/FROM.*ubuntu:latest/FROM ubuntu:xenial/; s/ubuntu18/ubuntu16/' BaseXenial.dockerfile
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: crazy-max/ghaction-docker-buildx@master
+      with:
+        version: latest
+    - name: Available platforms
+      run: echo ${{ steps.buildx.outputs.platforms }}
+    - name: Login
+      run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_TOKEN }}
+    - name: Build base-github-runner
+      run: |
+        docker buildx build \
+          -f Xenial.dockerfile \
+          --build-arg=BUILDKIT_INLINE_CACHE=1 \
+          --build-arg=BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
+          --build-arg=VCS_REF=${GITHUB_SHA::8} \
+          --build-arg=LSB_RELEASE_DIR=1604 \
+          --build-arg=GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
+          --build-arg=GITHUB_FEED_TOKEN=${{ secrets.GITHUB_PAT }} \
+          -t ${ORG}/base-github-runner:ubuntu-xenial \
+          -t ${ORG}/base-github-runner:ubuntu-16.04 \
+          --cache-from=${ORG}/base-github-runner:latest \
+          --output="type=image,push=true" \
+          .
+    - name: Get the updated README from the docker image
+      run: |
+        docker create --name=base-github-runner-${GITHUB_SHA::8} ${ORG}/base-github-runner:ubuntu-xenial
+        docker cp base-github-runner-${GITHUB_SHA::8}:/imagegeneration/metadatafile Ubunte1604-README.md
+        docker rm base-github-runner-${GITHUB_SHA::8}
+    - name: Commit files
+      run: |
+        echo ${{ github.ref }}
+        git add .
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -m "ci: Automated build push" -a | exit 0
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        branch: ${{ github.ref }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
