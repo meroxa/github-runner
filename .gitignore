@@ -1,0 +1,4 @@
+# Ignore IntelliJ IDEA stuff, except runConfigurations
+.idea
+*.iml
+!.idea/runConfigurations
