@@ -63,6 +63,12 @@ jobs:
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Dispatch "deploy" Bionic
+      run: |
+        curl -X POST https://api.github.com/repos/terradatum/github-runner/dispatches \
+          -H 'Accept: application/vnd.github.everest-preview+json' \
+          -H 'Authorization: token ${{ secrets.GITHUB_PAT }}' \
+          --data '{"event_type": "deploy-bionic"}'
   ubuntu_xenial_deploy:
     runs-on: [self-hosted]
     timeout-minutes: 720
@@ -119,9 +125,9 @@ jobs:
       with:
         branch: ${{ github.ref }}
         github_token: ${{ secrets.GITHUB_TOKEN }}
-    - name: Dispatch "deploy"
+    - name: Dispatch "deploy" Xenial
       run: |
         curl -X POST https://api.github.com/repos/terradatum/github-runner/dispatches \
           -H 'Accept: application/vnd.github.everest-preview+json' \
-          -H 'Authorization: token ${{ secrets.GITHUB_PUBLIC_PAT }}' \
-          --data '{"event_type": "deploy"}'
+          -H 'Authorization: token ${{ secrets.GITHUB_PAT }}' \
+          --data '{"event_type": "deploy-xenial"}'
