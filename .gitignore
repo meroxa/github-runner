@@ -1,4 +1,5 @@
 # Ignore IntelliJ IDEA stuff, except runConfigurations
 .idea
 *.iml
+Xenial.dockerfile
 !.idea/runConfigurations

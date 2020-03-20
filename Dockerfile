@@ -91,7 +91,6 @@ ARG BASE_SCRIPTS_FOLDER=/imagegeneration/base
 ARG INSTALLER_SCRIPT_FOLDER=/imagegeneration/installers
 ARG HELPER_SCRIPTS=/imagegeneration/helpers
 ARG LSB_RELEASE_DIR
-ARG GITHUB_TOKEN
 
 # https://github.com/hhvm/hhvm-docker/issues/11
 ENV HHVM_DISABLE_NUMA=true

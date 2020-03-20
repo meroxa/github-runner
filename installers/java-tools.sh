@@ -7,7 +7,7 @@
 # Source the helpers for use with the script
 source $HELPER_SCRIPTS/document.sh
 
-DEFAULT_JDK_VERSION=13
+DEFAULT_JDK_VERSION=11
 ARCH=$(dpkg --print-architecture)
 
 set -e
@@ -71,9 +71,9 @@ done
 echo "Lastly, documenting what we added to the metadata file"
 DocumentInstalledItem "AdoptOpenJDK:"
 DocumentInstalledItem "8 ($("/usr/lib/jvm/adoptopenjdk-8-hotspot-$ARCH/bin/java" -showversion |& head -n 1))"
-DocumentInstalledItem "11 ($("/usr/lib/jvm/adoptopenjdk-11-hotspot-$ARCH/bin/java" -showversion |& head -n 1))"
+DocumentInstalledItem "11 ($("/usr/lib/jvm/adoptopenjdk-11-hotspot-$ARCH/bin/java" -showversion |& head -n 1)) (default)"
 DocumentInstalledItem "12 ($("/usr/lib/jvm/adoptopenjdk-12-hotspot-$ARCH/bin/java" -showversion |& head -n 1))"
-DocumentInstalledItem "13 ($("/usr/lib/jvm/adoptopenjdk-13-hotspot-$ARCH/bin/java" -showversion |& head -n 1)) (default)"
+DocumentInstalledItem "13 ($("/usr/lib/jvm/adoptopenjdk-13-hotspot-$ARCH/bin/java" -showversion |& head -n 1))"
 DocumentInstalledItem "Ant ($(ant -version))"
 DocumentInstalledItem "Gradle ${gradleVersion}"
 DocumentInstalledItem "Maven ($(mvn -version | head -n 1))"

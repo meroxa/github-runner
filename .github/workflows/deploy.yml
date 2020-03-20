@@ -1,13 +1,13 @@
 name: GitHub Actions Runner in Docker - Latest
 on:
   push:
-    paths-ignore:
-      - README.md
-      - Ubuntu1804-README.md
-      - Ubuntu1604-README.md
     branches:
       - master
-      - develop
+    paths:
+      - '.installers/**'
+      - 'virtual-environments'
+      - 'Dockerfile'
+      - '.github/workflows/deploy.yml'
 
 jobs:
   ubuntu_bionic_deploy:
@@ -38,7 +38,6 @@ jobs:
           --build-arg=BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
           --build-arg=VCS_REF=${GITHUB_SHA::8} \
           --build-arg=LSB_RELEASE_DIR=1804 \
-          --build-arg=GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
           --build-arg=GITHUB_FEED_TOKEN=${{ secrets.GITHUB_PAT }} \
           -t ${ORG}/base-github-runner:latest \
           -t ${ORG}/base-github-runner:ubuntu-latest \
@@ -56,13 +55,14 @@ jobs:
       run: |
         echo ${{ github.ref }}
         git add .
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git commit -m "ci: Automated build push" -a | exit 0
+        git config --local user.email "sysadmin@terradatum.com"
+        git config --local user.name "Terradatum Automation"
+        git commit -m "ci: Automated build push [skip ci]" -a | exit 0
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
+        github_token: ${{ secrets.GITHUB_PAT }}
     - name: Dispatch "deploy" Bionic
       run: |
         curl -X POST https://api.github.com/repos/terradatum/github-runner/dispatches \
@@ -101,7 +101,6 @@ jobs:
           --build-arg=BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
           --build-arg=VCS_REF=${GITHUB_SHA::8} \
           --build-arg=LSB_RELEASE_DIR=1604 \
-          --build-arg=GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
           --build-arg=GITHUB_FEED_TOKEN=${{ secrets.GITHUB_PAT }} \
           -t ${ORG}/base-github-runner:ubuntu-xenial \
           -t ${ORG}/base-github-runner:ubuntu-16.04 \
@@ -117,14 +116,14 @@ jobs:
       run: |
         echo ${{ github.ref }}
         git add .
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git commit -m "ci: Automated build push" -a | exit 0
+        git config --local user.email "sysadmin@terradatum.com"
+        git config --local user.name "Terradatum Automation"
+        git commit -m "ci: Automated build push [skip ci]" -a | exit 0
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
         branch: ${{ github.ref }}
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.GITHUB_PAT }}
     - name: Dispatch "deploy" Xenial
       run: |
         curl -X POST https://api.github.com/repos/terradatum/github-runner/dispatches \
