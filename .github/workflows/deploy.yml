@@ -104,7 +104,7 @@ jobs:
           --build-arg=GITHUB_FEED_TOKEN=${{ secrets.GITHUB_PAT }} \
           -t ${ORG}/base-github-runner:ubuntu-xenial \
           -t ${ORG}/base-github-runner:ubuntu-16.04 \
-          --cache-from=${ORG}/base-github-runner:latest \
+          --cache-from=${ORG}/base-github-runner:ubuntu-xenial \
           --output="type=image,push=true" \
           .
     - name: Get the updated README from the docker image
