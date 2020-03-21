@@ -51,18 +51,20 @@ jobs:
         docker create --name=base-github-runner-bionic-${GITHUB_SHA::8} ${ORG}/base-github-runner:latest
         docker cp base-github-runner-bionic-${GITHUB_SHA::8}:/imagegeneration/metadatafile Ubuntu1804-README.md
         docker rm base-github-runner-bionic-${GITHUB_SHA::8}
-    - name: Commit files
+    - name: Set up Git
+      run: |
+        git config --local user.email "sysadmin@terradatum.com"
+        git config --local user.name "Terradatum Automation"
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_PAT }}@github.com/${GITHUB_REPOSITORY}.git
+    - name: Add, commit, pull, and then push changes
       run: |
         echo ${{ github.ref }}
         git add .
-        git config --local user.email "sysadmin@terradatum.com"
-        git config --local user.name "Terradatum Automation"
-        git commit -m "ci: Automated build push [skip ci]" -a | exit 0
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        branch: ${{ github.ref }}
-        github_token: ${{ secrets.GITHUB_PAT }}
+        if output=$(git status --porcelain) && [ ! -z "$output" ]; then
+          git commit -m "ci: Automated build push [skip ci]" -a | exit 0
+          git pull --rebase
+          git push
+        fi
     - name: Dispatch "deploy" Bionic
       run: |
         curl -X POST https://api.github.com/repos/terradatum/github-runner/dispatches \
@@ -112,18 +114,20 @@ jobs:
         docker create --name=base-github-runner-${GITHUB_SHA::8} ${ORG}/base-github-runner:ubuntu-xenial
         docker cp base-github-runner-${GITHUB_SHA::8}:/imagegeneration/metadatafile Ubuntu1604-README.md
         docker rm base-github-runner-${GITHUB_SHA::8}
-    - name: Commit files
+    - name: Set up Git
+      run: |
+        git config --local user.email "sysadmin@terradatum.com"
+        git config --local user.name "Terradatum Automation"
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_PAT }}@github.com/${GITHUB_REPOSITORY}.git
+    - name: Add, commit, pull, and then push changes
       run: |
         echo ${{ github.ref }}
         git add .
-        git config --local user.email "sysadmin@terradatum.com"
-        git config --local user.name "Terradatum Automation"
-        git commit -m "ci: Automated build push [skip ci]" -a | exit 0
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        branch: ${{ github.ref }}
-        github_token: ${{ secrets.GITHUB_PAT }}
+        if output=$(git status --porcelain) && [ ! -z "$output" ]; then
+          git commit -m "ci: Automated build push [skip ci]" -a | exit 0
+          git pull --rebase
+          git push
+        fi
     - name: Dispatch "deploy" Xenial
       run: |
         curl -X POST https://api.github.com/repos/terradatum/github-runner/dispatches \
