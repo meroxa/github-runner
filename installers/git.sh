@@ -4,11 +4,12 @@
 ##  Desc:  Installs Git
 ################################################################################
 
-# Source the helpers for use with the script
-source $HELPER_SCRIPTS/document.sh
-
 HUB_VERSION=2.14.2
 ARCH=$(dpkg --print-architecture)
+ARCH=${ARCH/hf/}
+
+# Source the helpers for use with the script
+source $HELPER_SCRIPTS/document.sh
 
 ## Install git
 add-apt-repository ppa:git-core/ppa -y

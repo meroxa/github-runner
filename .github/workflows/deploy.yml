@@ -45,6 +45,7 @@ jobs:
           -t ${ORG}/base-github-runner:ubuntu-18.04 \
           --cache-from=${ORG}/base-github-runner:latest \
           --output="type=image,push=true" \
+          --platform linux/amd64,linux/arm/v7,linux/arm64 \
           .
     - name: Get the updated README from the docker image
       run: |
@@ -108,6 +109,7 @@ jobs:
           -t ${ORG}/base-github-runner:ubuntu-16.04 \
           --cache-from=${ORG}/base-github-runner:ubuntu-xenial \
           --output="type=image,push=true" \
+          --platform linux/amd64,linux/arm/v7,linux/arm64 \
           .
     - name: Get the updated README from the docker image
       run: |
