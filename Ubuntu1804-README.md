@@ -4,7 +4,7 @@ The following software is installed on machines with the dev update.
 - 7-Zip 16.02
 - Ansible (ansible 2.9.6)
 - AzCopy (azcopy 7.3.0-netcore)
-- Azure CLI (azure-cli                          2.2.0)
+- Azure CLI (azure-cli                          2.3.0)
 - Azure CLI (azure-devops                      0.17.0)
 - Basic CLI:
   - curl
@@ -32,16 +32,20 @@ The following software is installed on machines with the dev update.
   - wget
   - zip
   - zstd
-- AWS CLI (aws-cli/1.18.25 Python/2.7.17 Linux/3.10.0-1062.12.1.el7.x86_64 botocore/1.15.25)
+- AWS CLI (aws-cli/1.18.32 Python/2.7.17 Linux/4.15.0-1054-aws botocore/1.15.32)
 - build-essential
 - Clang 6.0 (6.0.1)
 - Clang 8 (8.0.1)
 - Clang 9 (9.0.0)
+- Clang 10 (10.0.0)
+- Clang 11 (11.0.0)
 - CMake (cmake version 3.16.2)
 - Docker Compose (docker-compose version 1.25.4, build 8d51620a)
 - Docker (Docker version 19.03.8, build afacb8b7f0)
 - .NET Core SDK:
+  - 3.1.201
   - 3.1.200
+  - 3.1.103
   - 3.1.102
   - 3.1.101
   - 3.1.100
@@ -70,12 +74,14 @@ The following software is installed on machines with the dev update.
   - 2.2.102
   - 2.2.101
   - 2.2.100
+  - 2.1.805
   - 2.1.804
   - 2.1.803
   - 2.1.802
   - 2.1.801
   - 2.1.701
   - 2.1.700
+  - 2.1.610
   - 2.1.609
   - 2.1.608
   - 2.1.607
@@ -84,6 +90,7 @@ The following software is installed on machines with the dev update.
   - 2.1.604
   - 2.1.603
   - 2.1.602
+  - 2.1.513
   - 2.1.512
   - 2.1.511
   - 2.1.510
@@ -106,16 +113,16 @@ The following software is installed on machines with the dev update.
 - Firefox (Mozilla Firefox 74.0)
 - Geckodriver (0.26.0); Gecko Driver is available via GECKOWEBDRIVER environment variable
 - GNU C++ 7.5.0
-- GNU C++ 8.3.0
+- GNU C++ 8.4.0
 - GNU C++ 9.2.1
-- GNU Fortran 8.3.0
+- GNU Fortran 8.4.0
 - GNU Fortran 9.2.1
-- Git (2.25.2)
+- Git (2.26.0)
 - Git Large File Storage (LFS) (2.10.0)
 - Hub CLI (2.14.2)
 - Google Chrome (Google Chrome 80.0.3987.149 )
 - ChromeDriver 80.0.3987.106 (f68069574609230cf9b635cd784cfb1bf81bb53a-refs/branch-heads/3987@{#882}); Chrome Driver is available via CHROMEWEBDRIVER environment variable
-- Google Cloud SDK (285.0.1)
+- Google Cloud SDK (286.0.0)
 - Haskell Cabal ()
 - Haskell Cabal ()
 - Haskell Cabal (cabal-install version 2.4.1.0
@@ -132,19 +139,19 @@ compiled using version 3.0.2.0 of the Cabal library )
 - GHC (The Glorious Glasgow Haskell Compilation System, version 8.8.1)
 - GHC (The Glorious Glasgow Haskell Compilation System, version 8.8.2)
 - Haskell Stack (Version 2.1.3, Git revision 636e3a759d51127df2b62f90772def126cdf6d1f (7735 commits) x86_64 hpack-0.31.2)
-- Heroku (heroku/7.39.1 linux-x64 node-v12.13.0)
-- HHVM (HipHop VM 4.49.0 (rel))
+- Heroku (heroku/7.39.2 linux-x64 node-v12.13.0)
+- HHVM (HipHop VM 4.51.0 (rel))
 - ImageMagick
 - AdoptOpenJDK:
 - 8 (openjdk version "1.8.0_242")
-- 11 (openjdk version "11.0.6" 2020-01-14)
+- 11 (openjdk version "11.0.6" 2020-01-14) (default)
 - 12 (openjdk version "12.0.2" 2019-07-16)
-- 13 (openjdk version "13.0.2" 2020-01-14) (default)
+- 13 (openjdk version "13.0.2" 2020-01-14)
 - Ant (Apache Ant(TM) version 1.10.5 compiled on March 28 2019)
-- Gradle 6.2.2
+- Gradle 6.3
 - Maven (Apache Maven 3.6.3 (cecedd343002696d0abb50b32b541b8a6ba2883f))
 - Kind (kind v0.7.0 go1.13.6 linux/amd64)
-- kubectl (Client Version: v1.17.4)
+- kubectl (error: Missing or incomplete configuration info.  Please point to an existing, complete config file:)
 - helm (v3.1.2+gd878d4d)
 - Leiningen (Leiningen 2.9.3 on Java 1.8.0_242 OpenJDK 64-Bit Server VM)
 - Mercurial (Mercurial Distributed SCM (version 4.5.3))
@@ -159,16 +166,16 @@ Local version: Unknown)
 - n (6.4.0)
 - Parcel (1.12.4)
 - TypeScript (Version 3.8.3)
-- Webpack (4.42.0)
+- Webpack (4.42.1)
 - Webpack CLI (3.3.11)
 - Yarn (1.22.4)
 - Bazel (bazel 2.2.0)
 - Bazelisk (1.3.0)
 - PhantomJS (2.1.1)
-- PHP 7.1 (PHP 7.1.33-12+ubuntu18.04.1+deb.sury.org+1 (cli) (built: Feb 23 2020 07:22:16) ( NTS ))
-- PHP 7.2 (PHP 7.2.28-3+ubuntu18.04.1+deb.sury.org+1 (cli) (built: Feb 23 2020 07:23:25) ( NTS ))
-- PHP 7.3 (PHP 7.3.15-3+ubuntu18.04.1+deb.sury.org+1 (cli) (built: Feb 23 2020 07:23:33) ( NTS ))
-- PHP 7.4 (PHP 7.4.3 (cli) (built: Feb 23 2020 07:24:28) ( NTS ))
+- PHP 7.1 (PHP 7.1.33-14+ubuntu18.04.1+deb.sury.org+1 (cli) (built: Mar 20 2020 13:57:43) ( NTS ))
+- PHP 7.2 (PHP 7.2.29-1+ubuntu18.04.1+deb.sury.org+1 (cli) (built: Mar 20 2020 13:54:39) ( NTS ))
+- PHP 7.3 (PHP 7.3.16-1+ubuntu18.04.1+deb.sury.org+1 (cli) (built: Mar 20 2020 13:51:46) ( NTS ))
+- PHP 7.4 (PHP 7.4.4 (cli) (built: Mar 20 2020 13:47:45) ( NTS ))
 - Composer  (Composer version 1.10.1 2020-03-13 20:34:27)
 - PHPUnit (PHPUnit 7.5.20 by Sebastian Bergmann and contributors.)
 - Pollinate
@@ -183,16 +190,16 @@ Local version: Unknown)
 - clippy (0.0.212)
 - rustdoc (1.42.0)
 - bindgen (0.53.2)
-- cbindgen (0.13.1)
-- Julia (julia version 1.3.1)
+- cbindgen (0.13.2)
+- Julia (julia version 1.4.0)
 - sbt (1.3.8)
 - Selenium server standalone (available via SELENIUM_JAR_PATH environment variable)
 - Sphinx Open Source Search Server
 - Subversion (svn, version 1.9.7 (r1800392))
 - Terraform (Terraform v0.12.24)
-- Packer (1.5.4)
+- Packer (1.5.5)
 - Vcpkg 2020.02.04-unknownhash
-- Zeit Now CLI (17.0.4)
+- Zeit Now CLI (17.1.1)
 - Google Repository 58
 - Google Play services 49
 - Google APIs 24
