@@ -104,7 +104,7 @@ COPY installers/git.sh "${INSTALLER_SCRIPT_FOLDER}/"
 COPY virtual-environments/images/linux/scripts/installers/go.sh "${INSTALLER_SCRIPT_FOLDER}/"
 COPY virtual-environments/images/linux/scripts/installers/google-chrome.sh "${INSTALLER_SCRIPT_FOLDER}/"
 COPY virtual-environments/images/linux/scripts/installers/google-cloud-sdk.sh "${INSTALLER_SCRIPT_FOLDER}/"
-COPY installers/haskell.sh "${INSTALLER_SCRIPT_FOLDER}/"
+COPY virtual-environments/images/linux/scripts/installers/haskell.sh "${INSTALLER_SCRIPT_FOLDER}/"
 COPY virtual-environments/images/linux/scripts/installers/heroku.sh "${INSTALLER_SCRIPT_FOLDER}/"
 COPY installers/hhvm.sh "${INSTALLER_SCRIPT_FOLDER}/"
 
