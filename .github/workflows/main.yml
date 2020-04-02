@@ -62,7 +62,7 @@ jobs:
         echo ${{ github.ref }}
         git add .
         if output=$(git status --porcelain) && [ ! -z "$output" ]; then
-          git commit -m "ci: Update Ubuntu1804-README.md [skip ci]" -a | exit 0
+          git commit -m "ci: Update Ubuntu1804-README.md [skip ci]" -a
           git pull --rebase
           git push
         fi
@@ -126,7 +126,7 @@ jobs:
         echo ${{ github.ref }}
         git add .
         if output=$(git status --porcelain) && [ ! -z "$output" ]; then
-          git commit -m "ci: Ubuntu1804-README.md [skip ci]" -a | exit 0
+          git commit -m "ci: Update Ubuntu1604-README.md [skip ci]" -a
           git pull --rebase
           git push
         fi
