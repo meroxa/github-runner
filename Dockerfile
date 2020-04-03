@@ -107,6 +107,7 @@ COPY virtual-environments/images/linux/scripts/installers/google-cloud-sdk.sh "$
 COPY virtual-environments/images/linux/scripts/installers/haskell.sh "${INSTALLER_SCRIPT_FOLDER}/"
 COPY virtual-environments/images/linux/scripts/installers/heroku.sh "${INSTALLER_SCRIPT_FOLDER}/"
 COPY installers/hhvm.sh "${INSTALLER_SCRIPT_FOLDER}/"
+COPY installers/auto.sh "${INSTALLER_SCRIPT_FOLDER}/"
 
 RUN chmod -R 777 "${BASE_SCRIPTS_FOLDER}"/*.sh \
   && chmod -R 777 "${HELPER_SCRIPTS}"/*.sh \
@@ -124,7 +125,8 @@ RUN chmod -R 777 "${BASE_SCRIPTS_FOLDER}"/*.sh \
   && "${INSTALLER_SCRIPT_FOLDER}/google-cloud-sdk.sh" \
   && "${INSTALLER_SCRIPT_FOLDER}/haskell.sh" \
   && "${INSTALLER_SCRIPT_FOLDER}/heroku.sh" \
-  && "${INSTALLER_SCRIPT_FOLDER}/hhvm.sh"
+  && "${INSTALLER_SCRIPT_FOLDER}/hhvm.sh" \
+  && "${INSTALLER_SCRIPT_FOLDER}/auto.sh"
 
 FROM stage3 as stage4
 
