@@ -8,12 +8,11 @@
 source $HELPER_SCRIPTS/document.sh
 
 curl -s https://api.github.com/repos/intuit/auto/releases/latest \
-| grep 'browser_download_url.*tar.gz"' \
+| grep 'browser_download_url.*gz"' \
 | cut -d : -f 2,3 \
 | tr -d \" \
 | xargs -n 1 curl -sSL \
-| tar -xz
-mv auto-linux /usr/bin/auto
+| gunzip > /usr/bin/auto
 chmod +x /usr/bin/auto
 
 # Run tests to determine that the software installed as expected
