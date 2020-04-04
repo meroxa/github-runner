@@ -52,9 +52,10 @@ fi
 
 # Document what was added to the image
 echo "Lastly, documenting what we added to the metadata file"
-DocumentInstalledItem "Az Module (1.0.0)"
-DocumentInstalledItem "Az Module (1.6.0)"
-DocumentInstalledItem "Az Module (2.3.2)"
-DocumentInstalledItem "Az Module (2.6.0)"
-DocumentInstalledItem "Az Module (2.8.0)"
-DocumentInstalledItem "Az Module (3.1.0)"
+DocumentInstalledItem "Az Module:"
+DocumentInstalledItemIndent "1.0.0"
+DocumentInstalledItemIndent "1.6.0"
+DocumentInstalledItemIndent "2.3.2"
+DocumentInstalledItemIndent "2.6.0"
+DocumentInstalledItemIndent "2.8.0"
+DocumentInstalledItemIndent "3.1.0"

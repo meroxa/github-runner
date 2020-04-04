@@ -33,6 +33,7 @@ fi
 
 # Document what was added to the image
 echo "Lastly, documenting what we added to the metadata file"
-DocumentInstalledItem "AWSPowerShell.NetCore Module (4.0.4.0)"
-DocumentInstalledItem "AWSPowerShell.NetCore Module (4.0.2.0)"
-DocumentInstalledItem "AWSPowerShell.NetCore Module (3.3.618.0)"
+DocumentInstalledItem "AWSPowerShell.NetCore Module:"
+DocumentInstalledItemIndent "4.0.4.0"
+DocumentInstalledItemIndent "4.0.2.0"
+DocumentInstalledItemIndent "3.3.618.0"
