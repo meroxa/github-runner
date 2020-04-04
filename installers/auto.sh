@@ -12,7 +12,8 @@ curl -s https://api.github.com/repos/intuit/auto/releases/latest \
 | cut -d : -f 2,3 \
 | tr -d \" \
 | xargs -n 1 curl -sSL \
-| gunzip > /usr/bin/auto
+| gunzip > auto
+mv auto /usr/bin/auto
 chmod +x /usr/bin/auto
 
 # Run tests to determine that the software installed as expected
