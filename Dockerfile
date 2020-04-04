@@ -55,6 +55,7 @@ COPY virtual-environments/images/linux/scripts/installers/azure-devops-cli.sh "$
 COPY virtual-environments/images/linux/scripts/installers/${LSB_RELEASE_DIR}/basic.sh "${INSTALLER_SCRIPT_FOLDER}/${LSB_RELEASE_DIR}/"
 COPY virtual-environments/images/linux/scripts/installers/aws.sh "${INSTALLER_SCRIPT_FOLDER}/"
 COPY virtual-environments/images/linux/scripts/installers/build-essential.sh "${INSTALLER_SCRIPT_FOLDER}/"
+COPY virtual-environments/images/linux/scripts/installers/nvm.sh "${INSTALLER_SCRIPT_FOLDER}/"
 COPY virtual-environments/images/linux/scripts/installers/clang.sh "${INSTALLER_SCRIPT_FOLDER}/"
 COPY virtual-environments/images/linux/scripts/installers/cmake.sh "${INSTALLER_SCRIPT_FOLDER}/"
 COPY virtual-environments/images/linux/scripts/installers/docker-compose.sh "${INSTALLER_SCRIPT_FOLDER}/"
@@ -77,6 +78,7 @@ RUN chmod -R 777 "${BASE_SCRIPTS_FOLDER}"/*.sh \
   && "${INSTALLER_SCRIPT_FOLDER}/${LSB_RELEASE_DIR}/basic.sh" \
   && "${INSTALLER_SCRIPT_FOLDER}/aws.sh" \
   && "${INSTALLER_SCRIPT_FOLDER}/build-essential.sh" \
+  && "${INSTALLER_SCRIPT_FOLDER}/nvm.sh" \
   && "${INSTALLER_SCRIPT_FOLDER}/clang.sh" \
   && "${INSTALLER_SCRIPT_FOLDER}/cmake.sh" \
   && "${INSTALLER_SCRIPT_FOLDER}/docker-compose.sh" \
