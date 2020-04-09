@@ -9,6 +9,13 @@ source $HELPER_SCRIPTS/document.sh
 
 export ACCEPT_EULA=Y
 
+sudo apt-get clean
+sudo apt-get purge mysql*
+sudo apt-get update
+sudo apt-get install -f
+sudo apt-get install mysql-server-5.7
+sudo apt-get dist-upgrade
+
 # Install MySQL Client
 apt-get install mysql-client -y
 

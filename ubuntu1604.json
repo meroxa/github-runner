@@ -23,7 +23,7 @@
     "builders": [
         {
             "type": "docker",
-            "image": "ubuntu:latest",
+            "image": "ubuntu:xenial",
             "commit": true,
             "privileged": true,
             "volumes": {
