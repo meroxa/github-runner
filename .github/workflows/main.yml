@@ -5,8 +5,8 @@ on:
       - master
     paths:
       - 'installers/**'
+      - 'ubuntu1?04.json'
       - 'virtual-environments'
-      - 'Dockerfile'
       - '.github/workflows/main.yml'
 
 jobs:
@@ -20,38 +20,28 @@ jobs:
       with:
         fetch-depth: 0
         submodules: true
-    - name: Get GitHub organization or user
-      run: echo ::set-env name=ORG::$(dirname ${GITHUB_REPOSITORY})
-    - name: Set up Docker Buildx
-      id: buildx
-      uses: crazy-max/ghaction-docker-buildx@master
-      with:
-        version: latest
-    - name: Available platforms
-      run: echo ${{ steps.buildx.outputs.platforms }}
-    - name: Login
-      run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
-    - name: Build base-github-runner
+    - name: Set up packer template_dir
       run: |
-        docker buildx build \
-          -f Dockerfile \
-          --build-arg=BUILDKIT_INLINE_CACHE=1 \
-          --build-arg=BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
-          --build-arg=VCS_REF=${GITHUB_SHA::8} \
-          --build-arg=LSB_RELEASE_DIR=1804 \
-          --build-arg=GITHUB_FEED_TOKEN=${{ secrets.GH_PAT }} \
-          -t ${ORG}/base-github-runner:latest \
-          -t ${ORG}/base-github-runner:ubuntu-latest \
-          -t ${ORG}/base-github-runner:ubuntu-bionic \
-          -t ${ORG}/base-github-runner:ubuntu-18.04 \
-          --cache-from=${ORG}/base-github-runner:latest \
-          --output="type=image,push=true" \
-          .
-    - name: Get the updated README from the docker image
+        /bin/rm -frv tmp_1804 && /bin/mkdir tmp_1804
+        /bin/cp -frv virtual-environments/images/linux/* tmp_1804/
+        /bin/cp -frv installers/* tmp_1804/scripts/installers/
+    - name: Merge packer templates
+      run: jq -s '.[0] as $o1 | .[1] as $o2 | .[2] as $o3 | ($o1 + $o2) |.provisioners = ($o2.provisioners + $o1.provisioners) |del(.provisioners[4,5,6,-1]) |.provisioners[9].scripts += $o3.scripts' virtual-environments/images/linux/ubuntu1804.json ubuntu1804.json add-scripts.json > tmp_1804/ubuntu1804.json
+    - name: Build 1804 with packer
       run: |
-        docker create --name=base-github-runner-bionic-${GITHUB_SHA::8} ${ORG}/base-github-runner:latest
-        docker cp base-github-runner-bionic-${GITHUB_SHA::8}:/imagegeneration/metadatafile Ubuntu1804-README.md
-        docker rm base-github-runner-bionic-${GITHUB_SHA::8}
+        cd tmp_1804
+        packer build \
+          -var commit_url="${{ github.ref }}" \
+          -var build_date="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
+          -var vcs_ref="$(git rev-parse --verify HEAD | cut -c1-8)" \
+          -var docker_username="${{ secrets.DOCKER_USERNAME }}" \
+          -var docker_password="${{ secrets.DOCKER_PASSWORD }}" \
+          -var github_feed_token="${{ secrets.GH_PAT }}" \
+          ubuntu1804.json
+    - name: Get the updated Ubuntu1804-README.md file
+      run: cp -frv tmp_1804/Ubuntu1804-README.md ./
+    - name: Remove the packer working directory
+      run: rm -frv tmp_1804
     - name: Set up Git
       run: |
         git config --local user.email "sysadmin@terradatum.com"
@@ -77,62 +67,50 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     timeout-minutes: 720
     steps:
-    - name: Copy Repo Files
-      uses: actions/checkout@master
-      with:
-        fetch-depth: 0
-        submodules: true
-    - name: Get GitHub organization or user
-      run: echo ::set-env name=ORG::$(dirname ${GITHUB_REPOSITORY})
-    - name: Copy Dockerfiles
-      run: |
-        cp Dockerfile Xenial.dockerfile
-        sed -i'' 's/FROM.*ubuntu:latest/FROM ubuntu:xenial/; s/ubuntu18/ubuntu16/' Xenial.dockerfile
-    - name: Set up Docker Buildx
-      id: buildx
-      uses: crazy-max/ghaction-docker-buildx@master
-      with:
-        version: latest
-    - name: Available platforms
-      run: echo ${{ steps.buildx.outputs.platforms }}
-    - name: Login
-      run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
-    - name: Build base-github-runner
-      run: |
-        docker buildx build \
-          -f Xenial.dockerfile \
-          --build-arg=BUILDKIT_INLINE_CACHE=1 \
-          --build-arg=BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
-          --build-arg=VCS_REF=${GITHUB_SHA::8} \
-          --build-arg=LSB_RELEASE_DIR=1604 \
-          --build-arg=GITHUB_FEED_TOKEN=${{ secrets.GH_PAT }} \
-          -t ${ORG}/base-github-runner:ubuntu-xenial \
-          -t ${ORG}/base-github-runner:ubuntu-16.04 \
-          --cache-from=${ORG}/base-github-runner:ubuntu-xenial \
-          --output="type=image,push=true" \
-          .
-    - name: Get the updated README from the docker image
-      run: |
-        docker create --name=base-github-runner-${GITHUB_SHA::8} ${ORG}/base-github-runner:ubuntu-xenial
-        docker cp base-github-runner-${GITHUB_SHA::8}:/imagegeneration/metadatafile Ubuntu1604-README.md
-        docker rm base-github-runner-${GITHUB_SHA::8}
-    - name: Set up Git
-      run: |
-        git config --local user.email "sysadmin@terradatum.com"
-        git config --local user.name "Terradatum Automation"
-        git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${GITHUB_REPOSITORY}.git
-    - name: Add, commit, pull, and then push changes
-      run: |
-        echo ${{ github.ref }}
-        git add .
-        if output=$(git status --porcelain) && [ ! -z "$output" ]; then
-          git commit -m "ci: Update Ubuntu1604-README.md [skip ci]" -a
-          git pull --rebase
-          git push
-        fi
-    - name: Dispatch "deploy" Xenial
-      run: |
-        curl -X POST https://api.github.com/repos/terradatum/github-runner/dispatches \
-          -H 'Accept: application/vnd.github.everest-preview+json' \
-          -H 'Authorization: token ${{ secrets.GH_PAT }}' \
-          --data '{"event_type": "deploy-xenial"}'
+      - name: Copy Repo Files
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 0
+          submodules: true
+      - name: Set up packer template_dir
+        run: |
+          rm -frv tmp_1604 && mkdir tmp_1604
+          /bin/cp -frv virtual-environments/images/linux/* tmp_1604/
+          /bin/cp -frv installers/* tmp_1604/scripts/installers/
+      - name: Merge packer templates
+        run: jq -s '.[0] as $o1 | .[1] as $o2 | .[2] as $o3 | ($o1 + $o2) |.provisioners = ($o2.provisioners + $o1.provisioners) |del(.provisioners[4,5,6,-1]) |.provisioners[9].scripts += $o3.scripts' virtual-environments/images/linux/ubuntu1604.json ubuntu1604.json add-scripts.json > tmp_1604/ubuntu1604.json
+      - name: Build 1604 with packer
+        run: |
+          cd tmp_1604
+          packer build \
+            -var commit_url=${{ github.ref }} \
+            -var build_date=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
+            -var vcs_ref=${GITHUB_SHA::8} \
+            -var docker_username=${{ secrets.DOCKER_USERNAME }} \
+            -var docker_password=${{ secrets.DOCKER_PASSWORD }} \
+            -var github_feed_token=${{ secrets.GH_PAT }} \
+            ubuntu1604.json
+      - name: Get the updated Ubuntu1604-README.md files
+        run: cp -frv tmp_1604/Ubuntu1604-README.md ./
+      - name: Remove the packer working directory
+        run: rm -frv tmp_1604
+      - name: Set up Git
+        run: |
+          git config --local user.email "sysadmin@terradatum.com"
+          git config --local user.name "Terradatum Automation"
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${GITHUB_REPOSITORY}.git
+      - name: Add, commit, pull, and then push changes
+        run: |
+          echo ${{ github.ref }}
+          git add .
+          if output=$(git status --porcelain) && [ ! -z "$output" ]; then
+            git commit -m "ci: Update Ubuntu1604-README.md [skip ci]" -a
+            git pull --rebase
+            git push
+          fi
+      - name: Dispatch "deploy" Xenial
+        run: |
+          curl -X POST https://api.github.com/repos/terradatum/github-runner/dispatches \
+            -H 'Accept: application/vnd.github.everest-preview+json' \
+            -H 'Authorization: token ${{ secrets.GH_PAT }}' \
+            --data '{"event_type": "deploy-xenial"}'

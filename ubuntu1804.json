@@ -1,0 +1,92 @@
+{
+    "variables": {
+        "vcs_ref": "",
+        "build_date": "",
+        "commit_url": "{{env `COMMIT_URL`}}",
+        "docker_username": "{{env `DOCKER_USERNAME`}}",
+        "docker_password": "{{env `DOCKER_PASSWORD`}}",
+        "image_folder": "/imagegeneration",
+        "commit_file": "/imagegeneration/commit.txt",
+        "imagedata_file": "/imagegeneration/imagedata.json",
+        "metadata_file": "/imagegeneration/metadatafile",
+        "installer_script_folder": "/imagegeneration/installers",
+        "helper_script_folder": "/imagegeneration/helpers",
+        "image_version": "dev",
+        "image_os": "ubuntu18",
+        "github_feed_token": "{{env `GITHUB_TOKEN`}}",
+        "go_default": "1.14",
+        "go_versions": "1.11 1.12 1.13 1.14"
+    },
+    "sensitive-variables": [
+        "github_feed_token"
+    ],
+    "builders": [
+        {
+            "type": "docker",
+            "image": "ubuntu:latest",
+            "commit": true,
+            "privileged": true,
+            "volumes": {
+                "/var/run/docker.sock": "/var/run/docker.sock"
+            },
+            "changes": [
+                "LABEL maintainer=\"G. Richard Bellamy <rbellamy@terradatum.com>\" org.label-schema.schema-version=\"1.0\" org.label-schema.name=\"terradatum/base-github-runner\" org.label-schema.description=\"Base Dockerized GitHub Actions runner.\" org.label-schema.url=\"https://github.com/terradatum/github-runner\" org.label-schema.vcs-url=\"https://github.com/terradatum/github-runner\" org.label-schema.vendor=\"Terradatum\" org.label-schema.docker.cmd=\"docker run -it terradatum/base-github-runner:latest /bin/bash\""
+            ]
+        }
+    ],
+    "post-processors": [
+        {
+            "type": "docker-tag",
+            "repository": "terradatum/base-github-runner",
+            "tag": "latest,ubuntu-latest,ubuntu-bionic,ubuntu-18.04"
+        },
+        {
+            "type": "docker-push",
+            "login": true,
+            "login_username": "{{user `docker_username`}}",
+            "login_password": "{{user `docker_password`}}"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "apt-get update",
+                "apt-get -y install --no-install-recommends sudo apt-utils software-properties-common lsb-release rsync wget curl libunwind8 dos2unix apt-transport-https ca-certificates"
+            ],
+            "execute_command": "sh -c '{{ .Vars }} {{ .Path }}'"
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "mkdir {{user `image_folder`}}",
+                "chmod 777 {{user `image_folder`}}",
+                "echo {{user `commit_url`}} > {{user `commit_file`}}",
+                "chmod +r {{user `commit_file`}}"
+            ],
+            "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+        },
+        {
+            "type": "shell",
+            "scripts": [
+                "{{template_dir}}/scripts/base/repos.sh"
+            ],
+            "environment_vars": [
+                "DEBIAN_FRONTEND=noninteractive"
+            ],
+            "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "apt-get update",
+                "apt-get dist-upgrade -y",
+                "echo '* soft nofile 65536 \n* hard nofile 65536' >> /etc/security/limits.conf",
+                "echo 'session required pam_limits.so' >> /etc/pam.d/common-session",
+                "echo 'session required pam_limits.so' >> /etc/pam.d/common-session-noninteractive",
+                "echo 'DefaultLimitNOFILE=65536' >> /etc/systemd/system.conf"
+            ],
+            "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+        }
+    ]
+}
