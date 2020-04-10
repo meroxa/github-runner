@@ -9,12 +9,14 @@ source $HELPER_SCRIPTS/document.sh
 
 export ACCEPT_EULA=Y
 
-sudo apt-get clean
-sudo apt-get purge mysql*
-sudo apt-get update
-sudo apt-get install -f
-sudo apt-get install mysql-server-5.7
-sudo apt-get dist-upgrade
+sudo echo "mysql-server mysql-server/root_password password root" | debconf-set-selections
+sudo echo "mysql-server mysql-server/root_password_again password root" | debconf-set-selections
+
+# UTF-8 and bind-address
+sudo sed -i -e "$ a [client]\n\n[mysql]\n\n[mysqld]"  /etc/mysql/my.cnf
+sudo sed -i -e "s/\(\[client\]\)/\1\ndefault-character-set = utf8/g" /etc/mysql/my.cnf
+sudo sed -i -e "s/\(\[mysql\]\)/\1\ndefault-character-set = utf8/g" /etc/mysql/my.cnf
+sudo sed -i -e "s/\(\[mysqld\]\)/\1\ninit_connect='SET NAMES utf8'\ncharacter-set-server = utf8\ncollation-server=utf8_unicode_ci\nbind-address = 0.0.0.0/g" /etc/mysql/my.cnf
 
 # Install MySQL Client
 apt-get install mysql-client -y
@@ -23,6 +25,12 @@ apt-get install mysql-client -y
 apt-get install libmysqlclient-dev -y
 
 apt-get install -y mysql-server
+sudo mkdir -p /var/lib/mysql
+sudo mkdir -p /var/run/mysqld
+sudo mkdir -p /var/log/mysql
+sudo chown -R mysql:mysql /var/lib/mysql
+sudo chown -R mysql:mysql /var/run/mysqld
+sudo chown -R mysql:mysql /var/log/mysql
 
 # Install MS SQL Server client tools (https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-setup-tools?view=sql-server-2017)
 apt-get install -y mssql-tools unixodbc-dev
