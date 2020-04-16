@@ -55,7 +55,7 @@
         {
             "type": "file",
             "source": "{{template_dir}}/initctl_faker",
-            "destination": "/sbin"
+            "destination": "/sbin/initctl_faker"
         },
         {
             "type": "shell",
