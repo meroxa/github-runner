@@ -27,10 +27,14 @@
             "commit": true,
             "privileged": true,
             "volumes": {
-                "/var/run/docker.sock": "/var/run/docker.sock"
+                "/var/run/docker.sock": "/var/run/docker.sock",
+                "/sys/fs/cgroup": "/sys/fs/cgroup",
+                "/tmp": "/tmp",
+                "/run": "/run"
             },
             "changes": [
-                "LABEL maintainer=\"G. Richard Bellamy <rbellamy@terradatum.com>\" org.label-schema.schema-version=\"1.0\" org.label-schema.name=\"terradatum/base-github-runner\" org.label-schema.description=\"Base Dockerized GitHub Actions runner.\" org.label-schema.url=\"https://github.com/terradatum/github-runner\" org.label-schema.vcs-url=\"https://github.com/terradatum/github-runner\" org.label-schema.vendor=\"Terradatum\" org.label-schema.docker.cmd=\"docker run -it terradatum/base-github-runner:latest /bin/bash\""
+                "LABEL maintainer=\"G. Richard Bellamy <rbellamy@terradatum.com>\" org.label-schema.schema-version=\"1.0\" org.label-schema.name=\"terradatum/base-github-runner\" org.label-schema.description=\"Base Dockerized GitHub Actions runner.\" org.label-schema.url=\"https://github.com/terradatum/github-runner\" org.label-schema.vcs-url=\"https://github.com/terradatum/github-runner\" org.label-schema.vendor=\"Terradatum\" org.label-schema.docker.cmd=\"docker run -it terradatum/base-github-runner:latest /bin/bash\"",
+                "CMD [\"/lib/systemd/systemd\"]"
             ]
         }
     ],
@@ -49,10 +53,22 @@
     ],
     "provisioners": [
         {
+            "type": "file",
+            "source": "{{template_dir}}/init_faker",
+            "destination": "/sbin"
+        },
+        {
             "type": "shell",
             "inline": [
                 "apt-get update",
-                "apt-get -y install --no-install-recommends sudo apt-utils software-properties-common lsb-release rsync wget curl libunwind8 dos2unix apt-transport-https ca-certificates"
+                "apt-get -y install --no-install-recommends sudo apt-utils software-properties-common lsb-release rsync wget curl libunwind8 dos2unix apt-transport-https ca-certificates systemd systemd-cron locales",
+                "sed -i 's/^\\($ModLoad imklog\\)/#\\1/' /etc/rsyslog.conf",
+                "locale-gen en_US.UTF-8",
+                "rm -f /lib/systemd/system/systemd*udev*",
+                "rm -f /lib/systemd/system/getty.target",
+                "chmod +x /sbin/initctl_faker",
+                "rm -fr /sbin/initctl",
+                "ln -s /sbin/initctl_faker /sbin/initctl"
             ],
             "execute_command": "sh -c '{{ .Vars }} {{ .Path }}'"
         },
@@ -70,9 +86,6 @@
             "type": "shell",
             "scripts": [
                 "{{template_dir}}/scripts/base/repos.sh"
-            ],
-            "environment_vars": [
-                "DEBIAN_FRONTEND=noninteractive"
             ],
             "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
         },
