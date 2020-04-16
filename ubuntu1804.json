@@ -54,7 +54,7 @@
     "provisioners": [
         {
             "type": "file",
-            "source": "{{template_dir}}/init_faker",
+            "source": "{{template_dir}}/initctl_faker",
             "destination": "/sbin"
         },
         {
@@ -71,38 +71,6 @@
                 "ln -s /sbin/initctl_faker /sbin/initctl"
             ],
             "execute_command": "sh -c '{{ .Vars }} {{ .Path }}'"
-        },
-        {
-            "type": "shell",
-            "inline": [
-                "mkdir {{user `image_folder`}}",
-                "chmod 777 {{user `image_folder`}}",
-                "echo {{user `commit_url`}} > {{user `commit_file`}}",
-                "chmod +r {{user `commit_file`}}"
-            ],
-            "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
-        },
-        {
-            "type": "shell",
-            "scripts": [
-                "{{template_dir}}/scripts/base/repos.sh"
-            ],
-            "environment_vars": [
-                "DEBIAN_FRONTEND=noninteractive"
-            ],
-            "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
-        },
-        {
-            "type": "shell",
-            "inline": [
-                "apt-get update",
-                "apt-get dist-upgrade -y",
-                "echo '* soft nofile 65536 \n* hard nofile 65536' >> /etc/security/limits.conf",
-                "echo 'session required pam_limits.so' >> /etc/pam.d/common-session",
-                "echo 'session required pam_limits.so' >> /etc/pam.d/common-session-noninteractive",
-                "echo 'DefaultLimitNOFILE=65536' >> /etc/systemd/system.conf"
-            ],
-            "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
         }
     ]
 }
