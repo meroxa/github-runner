@@ -9,6 +9,8 @@ on:
       - 'virtual-environments'
       - '.github/workflows/main.yml'
 
+# Force the build much?
+# See: https://github.community/t5/GitHub-Actions/Action-ignores-included-path/m-p/54170#M9084
 jobs:
   bionic:
     runs-on: [self-hosted]
