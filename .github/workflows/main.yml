@@ -22,9 +22,11 @@ jobs:
         submodules: true
     - name: Set up packer template_dir
       run: |
-        /bin/rm -frv tmp_1804 && /bin/mkdir tmp_1804
+        /bin/rm -frv tmp_1804
+        /bin/mkdir tmp_1804
         /bin/cp -frv virtual-environments/images/linux/* tmp_1804/
         /bin/cp -frv installers/* tmp_1804/scripts/installers/
+        /bin/cp -fv initctl_faker tmp_1604/
     - name: Merge packer templates
       run: jq -s '.[0] as $o1 | .[1] as $o2 | .[2] as $o3 | ($o1 + $o2) |.provisioners = ($o2.provisioners + $o1.provisioners) |del(.provisioners[4,5,6,-1]) |.provisioners[9].scripts += $o3.scripts' virtual-environments/images/linux/ubuntu1804.json ubuntu1804.json add-scripts.json > tmp_1804/ubuntu1804.json
     - name: Build 1804 with packer
@@ -75,9 +77,11 @@ jobs:
           submodules: true
       - name: Set up packer template_dir
         run: |
-          rm -frv tmp_1604 && mkdir tmp_1604
+          rm -frv tmp_1604
+          mkdir tmp_1604
           /bin/cp -frv virtual-environments/images/linux/* tmp_1604/
           /bin/cp -frv installers/* tmp_1604/scripts/installers/
+          /bin/cp -fv initctl_faker tmp_1604/
       - name: Merge packer templates
         run: jq -s '.[0] as $o1 | .[1] as $o2 | .[2] as $o3 | ($o1 + $o2) |.provisioners = ($o2.provisioners + $o1.provisioners) |del(.provisioners[4,5,6,-1]) |.provisioners[9].scripts += $o3.scripts' virtual-environments/images/linux/ubuntu1604.json ubuntu1604.json add-scripts.json > tmp_1604/ubuntu1604.json
       - name: Build 1604 with packer
