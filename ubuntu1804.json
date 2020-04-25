@@ -59,7 +59,7 @@
             "type": "shell",
             "inline": [
                 "apt-get update",
-                "apt-get -y install --no-install-recommends sudo apt-utils software-properties-common lsb-release rsync wget curl libunwind8 dos2unix apt-transport-https ca-certificates rsyslog systemd systemd-cron locales snapd squashfuse fuse",
+                "apt-get -y install --no-install-recommends sudo apt-utils software-properties-common lsb-release rsync wget curl libunwind8 dos2unix apt-transport-https ca-certificates rsyslog systemd systemd-cron locales",
                 "sed -i 's/^\\($ModLoad imklog\\)/#\\1/' /etc/rsyslog.conf",
                 "locale-gen en_US.UTF-8",
                 "rm -f /lib/systemd/system/systemd*udev*",
