@@ -28,13 +28,11 @@
             "privileged": true,
             "volumes": {
                 "/var/run/docker.sock": "/var/run/docker.sock",
-                "/sys/fs/cgroup": "/sys/fs/cgroup",
-                "/tmp": "/tmp",
-                "/run": "/run"
+                "/sys/fs/cgroup": "/sys/fs/cgroup:ro"
             },
+            "run_command": ["/lib/systemd/systemd"],
             "changes": [
-                "LABEL maintainer=\"G. Richard Bellamy <rbellamy@terradatum.com>\" org.label-schema.schema-version=\"1.0\" org.label-schema.name=\"terradatum/base-github-runner\" org.label-schema.description=\"Base Dockerized GitHub Actions runner.\" org.label-schema.url=\"https://github.com/terradatum/github-runner\" org.label-schema.vcs-url=\"https://github.com/terradatum/github-runner\" org.label-schema.vendor=\"Terradatum\" org.label-schema.docker.cmd=\"docker run -it terradatum/base-github-runner:latest /bin/bash\"",
-                "CMD [\"/lib/systemd/systemd\"]"
+                "LABEL maintainer=\"G. Richard Bellamy <rbellamy@terradatum.com>\" org.label-schema.schema-version=\"1.0\" org.label-schema.name=\"terradatum/base-github-runner\" org.label-schema.description=\"Base Dockerized GitHub Actions runner.\" org.label-schema.url=\"https://github.com/terradatum/github-runner\" org.label-schema.vcs-url=\"https://github.com/terradatum/github-runner\" org.label-schema.vendor=\"Terradatum\" org.label-schema.docker.cmd=\"docker run -it terradatum/base-github-runner:latest /bin/bash\""
             ]
         }
     ],
@@ -61,7 +59,7 @@
             "type": "shell",
             "inline": [
                 "apt-get update",
-                "apt-get -y install --no-install-recommends sudo apt-utils software-properties-common lsb-release rsync wget curl libunwind8 dos2unix apt-transport-https ca-certificates rsyslog systemd systemd-cron locales",
+                "apt-get -y install --no-install-recommends sudo apt-utils software-properties-common lsb-release rsync wget curl libunwind8 dos2unix apt-transport-https ca-certificates rsyslog systemd systemd-cron locales snapd squashfuse fuse",
                 "sed -i 's/^\\($ModLoad imklog\\)/#\\1/' /etc/rsyslog.conf",
                 "locale-gen en_US.UTF-8",
                 "rm -f /lib/systemd/system/systemd*udev*",
