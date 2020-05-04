@@ -21,12 +21,12 @@ apt-get -y install adoptopenjdk-8-hotspot=\*
 apt-get -y install adoptopenjdk-11-hotspot=\*
 apt-get -y install adoptopenjdk-12-hotspot=\*
 apt-get -y install adoptopenjdk-13-hotspot=\*
-update-java-alternatives -s "/usr/lib/jvm/adoptopenjdk-8-hotspot-$ARCH"
+update-java-alternatives -s "/usr/lib/jvm/adoptopenjdk-$DEFAULT_JDK_VERSION-hotspot-$ARCH"
 echo "JAVA_HOME_8=/usr/lib/jvm/adoptopenjdk-8-hotspot-$ARCH" | tee -a /etc/environment
 echo "JAVA_HOME_11=/usr/lib/jvm/adoptopenjdk-11-hotspot-$ARCH" | tee -a /etc/environment
 echo "JAVA_HOME_12=/usr/lib/jvm/adoptopenjdk-12-hotspot-$ARCH" | tee -a /etc/environment
 echo "JAVA_HOME_13=/usr/lib/jvm/adoptopenjdk-13-hotspot-$ARCH" | tee -a /etc/environment
-echo "JAVA_HOME=/usr/lib/jvm/adoptopenjdk-${DEFAULT_JDK_VERSION}-hotspot-$ARCH" | tee -a /etc/environment
+echo "JAVA_HOME=/usr/lib/jvm/adoptopenjdk-$DEFAULT_JDK_VERSION-hotspot-$ARCH" | tee -a /etc/environment
 echo "JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8" | tee -a /etc/environment
 
 # Install Ant

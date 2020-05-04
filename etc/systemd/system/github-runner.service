@@ -1,0 +1,17 @@
+[Unit]
+Description=GitHub Actions Runner
+Wants=github-runner-config.service
+After=github-runner-config.service
+
+[Service]
+Type=exec
+User=runner
+RootDirectory=/home/runner
+ExecStart=/home/runner/actions-runner/run.sh
+StandardOutput=inherit
+StandardError=inherit
+EnvironmentFile=/etc/environment
+EnvironmentFile=/etc/github-runner-env
+
+[Install]
+WantedBy=multi-user.target

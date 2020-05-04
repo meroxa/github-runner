@@ -1,0 +1,127 @@
+name: GitHub Actions Runner in AWS EC2
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'aws-add-provisioners.json'
+      - 'aws-replace-inline.json'
+      - 'aws-ubuntu1*04.json'
+      - 'merge-packer-templates.py'
+      - 'replace-scripts.json'
+      - '.github/workflows/aws-runner.yml'
+      - 'etc'
+      - 'installers'
+      - 'virtual-environments'
+
+jobs:
+  bionic:
+    runs-on: [self-hosted]
+    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    timeout-minutes: 720
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 0
+          submodules: true
+      - name: Set up packer docker directory
+        run: |
+          rm -frv aws-1804
+          mkdir aws-1804
+          cp -frv virtual-environments/images/linux/* aws-1804/
+          cp -frv installers/* aws-1804/scripts/installers/
+          cp -frv etc aws-1804/
+          cp -fv aws-entrypoint.sh aws-1804/
+      - name: Merge packer templates
+        run: |
+          ./merge-packer-templates.py
+            -t aws-1804/ubuntu1804.json \
+            -u virtual-environments/images/linux/ubuntu1804.json \
+            -g aws-ubuntu1804.json \
+            -a aws-add-provisioners.json \
+            -i aws-replace-inline.json \
+            -r replace-scripts.json \
+      - name: Build 1804 with packer
+        run: |
+          cd aws-1804
+          packer build \
+            -var commit_url="${{ github.ref }}" \
+            -var vcs_ref="$(git rev-parse --verify HEAD | cut -c1-8)" \
+            -var access_key="${{ secrets.AWS_ACCESS_KEY_ID }}" \
+            -var secret_key="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+            -var github_feed_token="${{ secrets.GH_PAT }}" \
+            ubuntu1804.json
+      - name: Get the updated Docker-Ubuntu1804-README.md file
+        run: cp -frv aws-1804/Ubuntu1804-README.md ./AWS-Ubuntu1804-README.md
+      - name: Remove the packer working directory
+        run: rm -frv aws-1804
+      - name: Set up Git
+        run: |
+          git config --local user.email "sysadmin@terradatum.com"
+          git config --local user.name "Terradatum Automation"
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${GITHUB_REPOSITORY}.git
+      - name: Add, commit, pull, and then push changes
+        run: |
+          echo ${{ github.ref }}
+          git add .
+          if output=$(git status --porcelain) && [ ! -z "$output" ]; then
+            git commit -m "ci: Update AWS-Ubuntu1804-README.md [skip ci]" -a
+            git pull --rebase
+            git push
+          fi
+  xenial:
+    runs-on: [self-hosted]
+    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    timeout-minutes: 720
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 0
+          submodules: true
+      - name: Set up packer aws directory
+        run: |
+          rm -frv aws-1604
+          mkdir aws-1604
+          cp -frv virtual-environments/images/linux/* aws-1604/
+          cp -frv installers/* aws-1604/scripts/installers/
+          cp -frv etc aws-1604/
+          cp -fv aws-entrypoint.sh aws-1604/
+      - name: Merge packer templates
+        run: |
+          ./merge-packer-templates.py
+            -t aws-1604/ubuntu1604.json \
+            -u virtual-environments/images/linux/ubuntu1604.json \
+            -g aws-ubuntu1604.json \
+            -a aws-add-provisioners.json \
+            -i aws-replace-inline.json \
+            -r replace-scripts.json \
+      - name: Build 1604 with packer
+        run: |
+          cd aws-1604
+          packer build \
+            -var commit_url="${{ github.ref }}" \
+            -var vcs_ref="$(git rev-parse --verify HEAD | cut -c1-8)" \
+            -var access_key="${{ secrets.AWS_ACCESS_KEY_ID }}" \
+            -var secret_key="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+            -var github_feed_token="${{ secrets.GH_PAT }}" \
+            ubuntu1604.json
+      - name: Get the updated AWS-Ubuntu1604-README.md file
+        run: cp -frv aws-1604/Ubuntu1604-README.md ./AWS-Ubuntu1604-README.md
+      - name: Remove the packer working directory
+        run: rm -frv aws-1604
+      - name: Set up Git
+        run: |
+          git config --local user.email "sysadmin@terradatum.com"
+          git config --local user.name "Terradatum Automation"
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${GITHUB_REPOSITORY}.git
+      - name: Add, commit, pull, and then push changes
+        run: |
+          echo ${{ github.ref }}
+          git add .
+          if output=$(git status --porcelain) && [ ! -z "$output" ]; then
+            git commit -m "ci: Update AWS-Ubuntu1604-README.md [skip ci]" -a
+            git pull --rebase
+            git push
+          fi

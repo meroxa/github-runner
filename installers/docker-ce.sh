@@ -19,7 +19,10 @@ if ! IsInstalled $DOCKER_PACKAGE; then
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
     add-apt-repository "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
     apt-get update
+    # Check whether we're running in a Docker container - if yes, then mask the Docker systemd units and socket
+    [[ -n $(awk -F/ '$2 == "docker"' /proc/self/cgroup) ]] && systemctl mask containerd.service docker.service docker.socket
     apt-get install -y docker-ce docker-ce-cli containerd.io --no-install-recommends
+    apt-get install -yf
 else
     echo "Docker ($DOCKER_PACKAGE) is already installed"
 fi

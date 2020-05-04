@@ -1,0 +1,3 @@
+RUNNER_REPOSITORY_URL=https://github.com/terradatum/github-runner
+RUNNER_TOKEN=THISISYOURRUNNERTOKEN
+RUNNER_NAME=github-runner-github-runner

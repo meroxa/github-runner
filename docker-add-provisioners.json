@@ -1,0 +1,24 @@
+{
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": [
+        "{{template_dir}}/scripts/installers/awspowershell.sh",
+        "{{template_dir}}/scripts/installers/auto.sh",
+        "{{template_dir}}/scripts/installers/actions-runner.sh"
+      ],
+      "environment_vars": [
+        "METADATA_FILE={{user `metadata_file`}}",
+        "HELPER_SCRIPTS={{user `helper_script_folder`}}",
+        "DEBIAN_FRONTEND=noninteractive",
+        "RUNNER_HOME=/home/runner"
+      ],
+      "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "file",
+      "source": "{{template_dir}}/etc/systemd/system",
+      "destination": "/etc/systemd/system/"
+    }
+  ]
+}

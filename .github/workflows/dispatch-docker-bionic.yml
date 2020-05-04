@@ -1,0 +1,58 @@
+name: Dispatch - GitHub Actions Runner in Docker - Bionic
+
+on:
+  repository_dispatch:
+    types: [deploy-docker-bionic]
+
+jobs:
+  bionic:
+    runs-on: [self-hosted]
+    steps:
+      - name: Copy Repo Files
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 0
+      - name: Get GitHub organization or user
+        run: echo ::set-env name=ORG::$(dirname ${GITHUB_REPOSITORY})
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: terradatum/ghaction-docker-buildx@master
+        with:
+          version: latest
+      - name: Available platforms
+        run: echo ${{ steps.buildx.outputs.platforms }}
+      - name: Login
+        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build github-runner
+        run: |
+          docker buildx build \
+            -f Dockerfile \
+            --build-arg=BUILDKIT_INLINE_CACHE=1 \
+            --build-arg=BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
+            --build-arg=VCS_REF=${GITHUB_SHA::8} \
+            -t ${ORG}/github-runner:latest \
+            -t ${ORG}/github-runner:ubuntu-latest \
+            -t ${ORG}/github-runner:ubuntu-bionic \
+            -t ${ORG}/github-runner:ubuntu-18.04 \
+            --cache-from=${ORG}/github-runner:latest \
+            --output="type=image,push=true" \
+            .
+      - name: Get the updated README from the docker image
+        run: |
+          docker create --name=github-runner-bionic-${GITHUB_SHA::8} ${ORG}/github-runner:latest
+          docker cp github-runner-bionic-${GITHUB_SHA::8}:/imagegeneration/metadatafile Ubuntu1804-README.md
+          docker rm github-runner-bionic-${GITHUB_SHA::8}
+      - name: Set up Git
+        run: |
+          git config --local user.email "sysadmin@terradatum.com"
+          git config --local user.name "Terradatum Automation"
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${GITHUB_REPOSITORY}.git
+      - name: Add, commit, pull, and then push changes
+        run: |
+          echo ${{ github.ref }}
+          git add .
+          if output=$(git status --porcelain) && [ ! -z "$output" ]; then
+            git commit -m "ci: Update Update Ubuntu1804-README.md [skip ci]" -a
+            git pull --rebase
+            git push
+          fi

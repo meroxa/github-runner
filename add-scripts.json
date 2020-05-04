@@ -1,5 +1,0 @@
-{
-  "scripts": [
-    "{{template_dir}}/scripts/installers/auto.sh"
-  ]
-}

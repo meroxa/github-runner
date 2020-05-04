@@ -1,0 +1,80 @@
+{
+    "variables": {
+        "runner_user": "runner",
+        "runner_group": "runner",
+        "runner_uid": "1000",
+        "runner_gid": "1000",
+        "runner_home": "/home/runner"
+    },
+    "builders": [
+        {
+            "name": "bionic",
+            "type": "docker",
+            "image": "terradatum/systemd:bionic",
+            "commit": true,
+            "volumes": {
+                "/sys/fs/cgroup": "/sys/fs/cgroup:ro"
+            },
+            "run_command": [
+                "-d",
+                "-i",
+                "-t",
+                "--restart=always",
+                "--cap-add=SYS_ADMIN",
+                "--device=/dev/fuse",
+                "{{.Image}}"
+            ]
+        },
+        {
+            "name": "xenial",
+            "type": "docker",
+            "image": "terradatum/systemd:xenial",
+            "commit": true,
+            "volumes": {
+                "/sys/fs/cgroup": "/sys/fs/cgroup:ro"
+            },
+            "run_command": [
+                "-d",
+                "-i",
+                "-t",
+                "--cap-add=SYS_ADMIN",
+                "--device=/dev/fuse",
+                "{{.Image}}"
+            ]
+        }
+
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "pause_before": "10s",
+            "inline": [
+                "apt-get update",
+                "apt-get install -y --no-install-recommends sudo",
+                "groupadd -g {{user `runner_gid`}} -r {{user `runner_group`}}",
+                "useradd -u {{user `runner_uid`}} -r -g {{user `runner_gid`}} -md {{user `runner_home`}} -s /bin/bash -c \"GitHub Runner\" {{user `runner_user`}}",
+                "usermod -aG sudo {{user `runner_user`}}",
+                "echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers",
+                "echo 'session required pam_env.so readenv=1' >> /etc/pam.d/sudo"
+            ],
+            "environment_vars": [
+                "DEBIAN_FRONTEND=noninteractive"
+            ],
+            "execute_command": "sh -c '{{ .Vars }} {{ .Path }}'"
+        }
+    ],
+    "post-processors": [
+        {
+            "only": ["bionic"],
+            "type": "docker-tag",
+            "repository": "local/systemd-runner",
+            "tag": "bionic"
+        },
+        {
+            "only": ["xenial"],
+            "type": "docker-tag",
+            "repository": "local/systemd-runner",
+            "tag": "xenial"
+        }
+    ]
+}
