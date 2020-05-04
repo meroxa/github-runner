@@ -45,7 +45,7 @@ jobs:
           cp -fv docker-entrypoint.sh docker-1804/
       - name: Merge packer templates
         run: |
-          ./merge-packer-templates.py
+          ./merge-packer-templates.py \
             -t docker-1804/ubuntu1804.json \
             -u virtual-environments/images/linux/ubuntu1804.json \
             -g docker-ubuntu1804.json \
@@ -101,7 +101,7 @@ jobs:
           cp -fv docker-entrypoint.sh docker-1604/
       - name: Merge packer templates
         run: |
-          ./merge-packer-templates.py
+          ./merge-packer-templates.py \
             -t docker-1604/ubuntu1604.json \
             -u virtual-environments/images/linux/ubuntu1604.json \
             -g docker-ubuntu1604.json \

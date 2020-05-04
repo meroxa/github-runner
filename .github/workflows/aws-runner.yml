@@ -32,10 +32,9 @@ jobs:
           cp -frv virtual-environments/images/linux/* aws-1804/
           cp -frv installers/* aws-1804/scripts/installers/
           cp -frv etc aws-1804/
-          cp -fv aws-entrypoint.sh aws-1804/
       - name: Merge packer templates
         run: |
-          ./merge-packer-templates.py
+          ./merge-packer-templates.py \
             -t aws-1804/ubuntu1804.json \
             -u virtual-environments/images/linux/ubuntu1804.json \
             -g aws-ubuntu1804.json \
@@ -87,10 +86,9 @@ jobs:
           cp -frv virtual-environments/images/linux/* aws-1604/
           cp -frv installers/* aws-1604/scripts/installers/
           cp -frv etc aws-1604/
-          cp -fv aws-entrypoint.sh aws-1604/
       - name: Merge packer templates
         run: |
-          ./merge-packer-templates.py
+          ./merge-packer-templates.py \
             -t aws-1604/ubuntu1604.json \
             -u virtual-environments/images/linux/ubuntu1604.json \
             -g aws-ubuntu1604.json \
