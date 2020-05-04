@@ -1,0 +1,119 @@
+{
+  "variables": {
+    "vcs_ref": "",
+    "build_date": "",
+    "runner_uid": "1000",
+    "runner_gid": "1000",
+    "commit_url": "{{env `COMMIT_URL`}}",
+    "docker_username": "{{env `DOCKER_USERNAME`}}",
+    "docker_password": "{{env `DOCKER_PASSWORD`}}",
+    "image_folder": "/imagegeneration",
+    "commit_file": "/imagegeneration/commit.txt",
+    "imagedata_file": "/imagegeneration/imagedata.json",
+    "metadata_file": "/imagegeneration/metadatafile",
+    "installer_script_folder": "/imagegeneration/installers",
+    "helper_script_folder": "/imagegeneration/helpers",
+    "image_version": "dev",
+    "image_os": "ubuntu18",
+    "github_feed_token": "{{env `GITHUB_TOKEN`}}",
+    "go_default": "1.14",
+    "go_versions": "1.11 1.12 1.13 1.14"
+  },
+  "sensitive-variables": [
+    "docker_username",
+    "docker_password",
+    "github_feed_token"
+  ],
+  "builders": [
+    {
+      "name": "xenial",
+      "type": "docker",
+      "pull": false,
+      "exec_user": "{{user `runner_uid`}}:{{user `runner_gid`}}",
+      "fix_upload_owner": false,
+      "privileged": true,
+      "image": "local/systemd-runner:xenial",
+      "commit": true,
+      "volumes": {
+        "/var/run/docker.sock": "/var/run/docker.sock",
+        "/sys/fs/cgroup": "/sys/fs/cgroup:ro"
+      },
+      "run_command": [
+        "-d",
+        "-i",
+        "-t",
+        "--restart=always",
+        "--cap-add=SYS_ADMIN",
+        "--device=/dev/fuse",
+        "{{.Image}}"
+      ],
+      "changes": [
+        "LABEL maintainer=\"G. Richard Bellamy <rbellamy@terradatum.com>\" org.label-schema.schema-version=\"1.0\" org.label-schema.name=\"terradatum/github-runner\" org.label-schema.description=\"Base Dockerized GitHub Actions runner.\" org.label-schema.url=\"https://github.com/terradatum/github-runner\" org.label-schema.vcs-url=\"https://github.com/terradatum/github-runner\" org.label-schema.vendor=\"Terradatum\" org.label-schema.docker.cmd=\"docker run -it terradatum/github-runner:xenial /bin/bash\"",
+        "LABEL org.label-schema.build-date=\"{{user `buid_date`}}\" org.label-schema.vcs-ref=\"{{user `vcs_ref`}}\"",
+        "ENV RUNNER_REPLACE_EXISTING \"true\""
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "pause_before": "10s",
+      "inline": [
+        "apt-get update",
+        "apt-get -y install --no-install-recommends sudo apt-utils software-properties-common lsb-release rsync gosu",
+        "apt-get -y install --no-install-recommends wget curl libunwind8 dos2unix apt-transport-https ca-certificates",
+        "apt-get -y install --no-install-recommends git ruby ohai"
+      ],
+      "environment_vars": [
+        "DEBIAN_FRONTEND=noninteractive"
+      ],
+      "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "file",
+      "source": "{{template_dir}}/docker-entrypoint.sh",
+      "destination": "/"
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "docker-tag",
+        "repository": "terradatum/github-runner",
+        "tag": "xenial"
+      },
+      {
+        "type": "docker-push",
+        "login": true,
+        "login_username": "{{user `docker_username`}}",
+        "login_password": "{{user `docker_password`}}"
+      }
+    ],
+    [
+      {
+        "type": "docker-tag",
+        "repository": "terradatum/github-runner",
+        "tag": "ubuntu-xenial"
+      },
+      {
+        "type": "docker-push",
+        "login": true,
+        "login_username": "{{user `docker_username`}}",
+        "login_password": "{{user `docker_password`}}"
+      }
+    ],
+    [
+      {
+        "type": "docker-tag",
+        "repository": "terradatum/github-runner",
+        "tag": "ubuntu-16.04"
+      },
+      {
+        "type": "docker-push",
+        "login": true,
+        "login_username": "{{user `docker_username`}}",
+        "login_password": "{{user `docker_password`}}"
+      }
+    ]
+  ]
+}
