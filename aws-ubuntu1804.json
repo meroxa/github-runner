@@ -32,6 +32,8 @@
       "type": "amazon-ebs",
       "access_key": "{{user `access_key`}}",
       "secret_key": "{{user `secret_key`}}",
+      "ssh_keypair_name": "td-aws-dev",
+      "ssh_agent_auth": true,
       "subnet_id": "subnet-c3b87cab",
       "ami_groups": ["all"],
       "source_ami_filter": {
@@ -79,6 +81,7 @@
         "apt-get -y install --no-install-recommends wget curl libunwind8 dos2unix apt-transport-https ca-certificates",
         "apt-get -y install --no-install-recommends git ruby ohai locales",
         "locale-gen en_US.UTF-8",
+        "export LANG=en_US.UTF-8 | tee -a /etc/environment",
         "groupadd -g {{user `runner_gid`}} -r {{user `runner_group`}}",
         "useradd -u {{user `runner_uid`}} -r -g {{user `runner_gid`}} -md {{user `runner_home`}} -s /bin/bash -c \"GitHub Runner\" {{user `runner_user`}}",
         "usermod -aG sudo {{user `runner_user`}}",

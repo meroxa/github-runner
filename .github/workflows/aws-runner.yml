@@ -25,6 +25,10 @@ jobs:
         with:
           fetch-depth: 0
           submodules: true
+      - name: Set up ssh-agent
+        uses: webfactory/ssh-agent@v0.2.0
+        with:
+          ssh-private-key: ${{ secrets.TD_AWS_DEV }}
       - name: Set up packer docker directory
         run: |
           rm -frv aws-1804
