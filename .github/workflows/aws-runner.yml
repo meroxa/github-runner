@@ -4,6 +4,7 @@ on:
     branches:
       - master
     paths:
+      - 'actions-runner-config.sh'
       - 'aws-add-provisioners.json'
       - 'aws-replace-inline.json'
       - 'aws-ubuntu1*04.json'
@@ -36,6 +37,7 @@ jobs:
           cp -frv virtual-environments/images/linux/* aws-1804/
           cp -frv installers/* aws-1804/scripts/installers/
           cp -frv etc aws-1804/
+          cp -fv actions-runner-config.sh aws-1804/
       - name: Merge packer templates
         run: |
           ./merge-packer-templates.py \
@@ -55,7 +57,7 @@ jobs:
             -var secret_key="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
             -var github_feed_token="${{ secrets.GH_PAT }}" \
             ubuntu1804.json
-      - name: Get the updated Docker-Ubuntu1804-README.md file
+      - name: Get the updated AWS-Ubuntu1804-README.md file
         run: cp -frv aws-1804/Ubuntu1804-README.md ./AWS-Ubuntu1804-README.md
       - name: Remove the packer working directory
         run: rm -frv aws-1804
@@ -90,6 +92,7 @@ jobs:
           cp -frv virtual-environments/images/linux/* aws-1604/
           cp -frv installers/* aws-1604/scripts/installers/
           cp -frv etc aws-1604/
+          cp -fv actions-runner-config.sh aws-1604/
       - name: Merge packer templates
         run: |
           ./merge-packer-templates.py \

@@ -46,11 +46,12 @@ ls -la *.tar.gz
 # extract to actions-runner directory in /home/runner
 #---------------------------------------------------
 echo
-echo "Extracting ${runner_file} to ${RUNNER_HOME}/actions-runner"
-mkdir -p "${RUNNER_HOME}"/actions-runner
-tar xzf "./${runner_file}" -C "${RUNNER_HOME}"/actions-runner
+echo "Extracting ${runner_file} to $RUNNER_HOME/actions-runner"
+mkdir -p "$RUNNER_HOME"/actions-runner
+tar xzf "./${runner_file}" -C "$RUNNER_HOME"/actions-runner
 # shellcheck disable=SC2164
-cd "${RUNNER_HOME}"/actions-runner
+cd "$RUNNER_HOME"/actions-runner
 echo "RUNNER_HOME=$RUNNER_HOME" | tee -a /etc/environment
 echo "RUNNER_WORK_DIRECTORY=$RUNNER_HOME/work" | tee -a /etc/environment
+echo ""
 ./bin/installdependencies.sh

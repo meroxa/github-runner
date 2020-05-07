@@ -4,6 +4,7 @@ on:
     branches:
       - master
     paths:
+      - 'actions-runner-config.sh'
       - 'docker-add-provisioners.json'
       - 'docker-base.json'
       - 'docker-entrypoint.sh'
@@ -42,6 +43,7 @@ jobs:
           cp -frv virtual-environments/images/linux/* docker-1804/
           cp -frv installers/* docker-1804/scripts/installers/
           cp -frv etc docker-1804/
+          cp -fv actions-runner-config.sh docker-1804/
           cp -fv docker-entrypoint.sh docker-1804/
       - name: Merge packer templates
         run: |
@@ -98,6 +100,7 @@ jobs:
           cp -frv virtual-environments/images/linux/* docker-1604/
           cp -frv installers/* docker-1604/scripts/installers/
           cp -frv etc docker-1604/
+          cp -fv actions-runner-config.sh docker-1604/
           cp -fv docker-entrypoint.sh docker-1604/
       - name: Merge packer templates
         run: |

@@ -428,3 +428,4 @@ docker run -d --restart always --name github-runner \
 [virtual-environments]: https://github.com/actions/virtual-environments
 [docker-systemd]: https://github.com/terradatum/docker-systemd
 [docker-systemd-hub]: https://hub.docker.com/r/terradatum/docker-systemd
+[runner-labels]: https://github.com/actions/runner/blob/a5f06b3ec2c138a4a3a03b674e87fa262e1f766f/docs/adrs/0397-runner-registration-labels.md

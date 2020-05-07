@@ -49,8 +49,7 @@
       ],
       "changes": [
         "LABEL maintainer=\"G. Richard Bellamy <rbellamy@terradatum.com>\" org.label-schema.schema-version=\"1.0\" org.label-schema.name=\"terradatum/github-runner\" org.label-schema.description=\"Base Dockerized GitHub Actions runner.\" org.label-schema.url=\"https://github.com/terradatum/github-runner\" org.label-schema.vcs-url=\"https://github.com/terradatum/github-runner\" org.label-schema.vendor=\"Terradatum\" org.label-schema.docker.cmd=\"docker run -it terradatum/github-runner:bionic /bin/bash\"",
-        "LABEL org.label-schema.build-date=\"{{user `buid_date`}}\" org.label-schema.vcs-ref=\"{{user `vcs_ref`}}\"",
-        "ENV RUNNER_REPLACE_EXISTING \"true\""
+        "LABEL org.label-schema.build-date=\"{{user `buid_date`}}\" org.label-schema.vcs-ref=\"{{user `vcs_ref`}}\""
       ]
     }
   ],

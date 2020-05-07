@@ -1,6 +1,26 @@
 {
   "provisioners": [
     {
+      "type": "file",
+      "source": "{{template_dir}}/etc/systemd/system",
+      "destination": "/etc/systemd/system/"
+    },
+    {
+      "type": "file",
+      "source": "{{template_dir}}/actions-runner-config.sh",
+      "destination": "/home/runner/actions-runner-config.sh"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "chmod 0644 /etc/github-runner-env",
+        "chmod 0644 /etc/systemd/system/github*",
+        "chmod 0644 /etc/systemd/system/github-runner.service.d/docker-override.conf",
+        "chmod 0700 /home/runner/actions-runner-config.sh"
+      ],
+      "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
       "type": "shell",
       "scripts": [
         "{{template_dir}}/scripts/installers/awspowershell.sh",
@@ -14,11 +34,6 @@
         "RUNNER_HOME=/home/runner"
       ],
       "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
-    },
-    {
-      "type": "file",
-      "source": "{{template_dir}}/etc/systemd/system",
-      "destination": "/etc/systemd/system/"
     }
   ]
 }

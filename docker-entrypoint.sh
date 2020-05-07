@@ -82,9 +82,13 @@ if [ $# -eq 0 ]; then
     exit 1
   fi
 
-  CONFIG_OPTS=""
+  RUNNER_REPLACE=""
   if [ "$(echo "$RUNNER_REPLACE_EXISTING" | tr '[:upper:]' '[:lower:]')" == "true" ]; then
-    CONFIG_OPTS="--replace"
+    RUNNER_REPLACE="--replace"
+  fi
+
+  if [[ -n "$RUNNER_LABELS" ]]; then
+    RUNNER_LABELS="--labels $RUNNER_LABELS"
   fi
 
   env >/etc/github-runner-env
