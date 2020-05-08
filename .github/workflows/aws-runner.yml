@@ -50,8 +50,8 @@ jobs:
       - name: Build 1804 with packer
         run: |
           cd aws-1804
-          AWS_MAX_ATTEMPTS=120
-          AWS_POLL_DELAY_SECONDS=10
+          export AWS_MAX_ATTEMPTS=120
+          export AWS_POLL_DELAY_SECONDS=10
           PACKER_LOG=1
           packer build \
             -var commit_url="${{ github.ref }}" \
@@ -108,8 +108,8 @@ jobs:
       - name: Build 1604 with packer
         run: |
           cd aws-1604
-          AWS_MAX_ATTEMPTS=120
-          AWS_POLL_DELAY_SECONDS=10
+          export AWS_MAX_ATTEMPTS=120
+          export AWS_POLL_DELAY_SECONDS=10
           PACKER_LOG=1
           packer build \
             -var commit_url="${{ github.ref }}" \
