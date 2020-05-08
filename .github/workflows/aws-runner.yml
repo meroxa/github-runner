@@ -26,10 +26,11 @@ jobs:
         with:
           fetch-depth: 0
           submodules: true
-      - name: Set up ssh-agent
-        uses: webfactory/ssh-agent@v0.2.0
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
         with:
-          ssh-private-key: ${{ secrets.TD_AWS_DEV }}
+          key: ${{ secrets.TD_AWS_DEV }}
+          name: id_rsa_td_aws_dev
       - name: Set up packer docker directory
         run: |
           rm -frv aws-1804
@@ -88,6 +89,11 @@ jobs:
         with:
           fetch-depth: 0
           submodules: true
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.TD_AWS_DEV }}
+          name: id_rsa_td_aws_dev
       - name: Set up packer aws directory
         run: |
           rm -frv aws-1604
