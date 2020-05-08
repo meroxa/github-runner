@@ -30,7 +30,6 @@ jobs:
         uses: webcoast-dk/ssh-agent@master
         with:
           ssh-private-key: ${{ secrets.TD_AWS_DEV }}
-          ssh-auth-sock: /tmp/ssh-auth.sock.${{ github.job }}
       - name: Set up packer docker directory
         run: |
           rm -frv aws-1804
@@ -93,7 +92,6 @@ jobs:
         uses: webcoast-dk/ssh-agent@master
         with:
           ssh-private-key: ${{ secrets.TD_AWS_DEV }}
-          ssh-auth-sock: /tmp/ssh-auth.sock.${{ github.job }}
       - name: Set up packer aws directory
         run: |
           rm -frv aws-1604
