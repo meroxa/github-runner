@@ -26,7 +26,7 @@ jobs:
       - name: Build bionic and xenial base with packer
         run: packer build docker-base.json
   bionic:
-    needs: base
+    needs: [base]
     runs-on: [self-hosted]
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     timeout-minutes: 720
@@ -52,7 +52,7 @@ jobs:
             -u virtual-environments/images/linux/ubuntu1804.json \
             -g docker-ubuntu1804.json \
             -a docker-add-provisioners.json \
-            -r replace-scripts.json \
+            -r replace-scripts.json
       - name: Build 1804 with packer
         run: |
           cd docker-1804
@@ -83,7 +83,7 @@ jobs:
             git push
           fi
   xenial:
-    needs: base
+    needs: [base]
     runs-on: [self-hosted]
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     timeout-minutes: 720
@@ -109,7 +109,7 @@ jobs:
             -u virtual-environments/images/linux/ubuntu1604.json \
             -g docker-ubuntu1604.json \
             -a docker-add-provisioners.json \
-            -r replace-scripts.json \
+            -r replace-scripts.json
       - name: Build 1604 with packer
         run: |
           cd docker-1604

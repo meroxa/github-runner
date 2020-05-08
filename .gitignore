@@ -7,3 +7,6 @@ docker-1804
 docker-1604
 aws-1804
 aws-1604
+
+# Ignore secrets
+.secrets

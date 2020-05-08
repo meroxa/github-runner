@@ -1,0 +1,6 @@
+{
+  "ref": "refs/heads/master",
+  "head_commit": {
+    "message": "Testing locally with act"
+  }
+}

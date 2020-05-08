@@ -31,18 +31,18 @@
       "pull": false,
       "exec_user": "{{user `runner_uid`}}:{{user `runner_gid`}}",
       "fix_upload_owner": false,
-      "privileged": true,
       "image": "local/systemd-runner:bionic",
       "commit": true,
       "volumes": {
         "/var/run/docker.sock": "/var/run/docker.sock",
-        "/sys/fs/cgroup": "/sys/fs/cgroup:ro"
+        "/sys/fs/cgroup": "/sys/fs/cgroup:ro",
+        "/dev/hugepages": "/dev/hugepages",
+        "/sys/fs/fuse/connections": "/sys/fs/fuse/connections"
       },
       "run_command": [
         "-d",
         "-i",
         "-t",
-        "--restart=always",
         "--cap-add=SYS_ADMIN",
         "--device=/dev/fuse",
         "{{.Image}}"
