@@ -26,11 +26,11 @@ jobs:
         with:
           fetch-depth: 0
           submodules: true
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
+      - name: Set up ssh-agent
+        uses: webfactory/ssh-agent@v0.2.0
         with:
-          key: ${{ secrets.TD_AWS_DEV }}
-          name: id_rsa_td_aws_dev
+          ssh-private-key: ${{ secrets.TD_AWS_DEV }}
+          ssh-auth-sock: /tmp/ssh-auth.sock.${{ github.run_id }}
       - name: Set up packer docker directory
         run: |
           rm -frv aws-1804
@@ -53,7 +53,7 @@ jobs:
           cd aws-1804
           export AWS_MAX_ATTEMPTS=120
           export AWS_POLL_DELAY_SECONDS=10
-          PACKER_LOG=1
+          export PACKER_LOG=1
           packer build \
             -var commit_url="${{ github.ref }}" \
             -var vcs_ref="$(git rev-parse --verify HEAD | cut -c1-8)" \
@@ -89,11 +89,11 @@ jobs:
         with:
           fetch-depth: 0
           submodules: true
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
+      - name: Set up ssh-agent
+        uses: webfactory/ssh-agent@v0.2.0
         with:
-          key: ${{ secrets.TD_AWS_DEV }}
-          name: id_rsa_td_aws_dev
+          ssh-private-key: ${{ secrets.TD_AWS_DEV }}
+          ssh-auth-sock: /tmp/ssh-auth.sock.${{ github.run_id }}
       - name: Set up packer aws directory
         run: |
           rm -frv aws-1604
@@ -116,7 +116,7 @@ jobs:
           cd aws-1604
           export AWS_MAX_ATTEMPTS=120
           export AWS_POLL_DELAY_SECONDS=10
-          PACKER_LOG=1
+          export PACKER_LOG=1
           packer build \
             -var commit_url="${{ github.ref }}" \
             -var vcs_ref="$(git rev-parse --verify HEAD | cut -c1-8)" \
