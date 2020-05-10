@@ -68,7 +68,7 @@ jobs:
         run: |
           git config --local user.email "sysadmin@terradatum.com"
           git config --local user.name "Terradatum Automation"
-          git remote set-url origin git@github.com/${GITHUB_REPOSITORY}.git
+          git remote set-url origin git@github.com:${GITHUB_REPOSITORY}.git
       - name: Add, commit, pull, and then push changes
         run: |
           echo ${{ github.ref }}
@@ -130,7 +130,7 @@ jobs:
         run: |
           git config --local user.email "sysadmin@terradatum.com"
           git config --local user.name "Terradatum Automation"
-          git remote set-url origin git@github.com/${GITHUB_REPOSITORY}.git
+          git remote set-url origin git@github.com:${GITHUB_REPOSITORY}.git
       - name: Add, commit, pull, and then push changes
         run: |
           echo ${{ github.ref }}
