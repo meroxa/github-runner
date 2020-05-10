@@ -30,7 +30,7 @@ jobs:
         uses: webcoast-dk/ssh-agent@master
         with:
           ssh-private-key: ${{ secrets.TD_AWS_DEV }}
-      - name: Set up packer docker directory
+      - name: Set up packer aws directory
         run: |
           rm -frv aws-1804
           mkdir aws-1804
@@ -68,7 +68,7 @@ jobs:
         run: |
           git config --local user.email "sysadmin@terradatum.com"
           git config --local user.name "Terradatum Automation"
-          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${GITHUB_REPOSITORY}.git
+          git remote set-url origin git@github.com/${GITHUB_REPOSITORY}.git
       - name: Add, commit, pull, and then push changes
         run: |
           echo ${{ github.ref }}
@@ -130,7 +130,7 @@ jobs:
         run: |
           git config --local user.email "sysadmin@terradatum.com"
           git config --local user.name "Terradatum Automation"
-          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${GITHUB_REPOSITORY}.git
+          git remote set-url origin git@github.com/${GITHUB_REPOSITORY}.git
       - name: Add, commit, pull, and then push changes
         run: |
           echo ${{ github.ref }}
