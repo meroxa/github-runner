@@ -11,9 +11,7 @@ source $HELPER_SCRIPTS/document.sh
 source $HELPER_SCRIPTS/apt.sh
 
 # because the sdk installation seems to only work with JDK 8
-ARCH=$(dpkg --print-architecture)
-update-java-alternatives -s "/usr/lib/jvm/adoptopenjdk-8-hotspot-$ARCH"
-export JAVA_HOME=JAVA_HOME_8
+export JAVA_HOME=$JAVA_HOME_8
 
 # Set env variable for SDK Root (https://developer.android.com/studio/command-line/variables)
 ANDROID_ROOT=/usr/local/lib/android
@@ -170,5 +168,5 @@ DocumentInstalledItem "Android NDK $(cat ${ANDROID_SDK_ROOT}/ndk-bundle/source.p
 DocumentInstalledItem "Android ConstraintLayout 1.0.2"
 DocumentInstalledItem "Android ConstraintLayout 1.0.1"
 
-update-java-alternatives -s "/usr/lib/jvm/adoptopenjdk-11-hotspot-$ARCH"
-export JAVA_HOME=JAVA_HOME_11
+# put it back to the default
+export JAVA_HOME=$JAVA_HOME_11

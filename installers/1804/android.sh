@@ -157,5 +157,4 @@ DocumentInstalledItem "Android SDK Build-Tools 17.0.0"
 DocumentInstalledItem "Android NDK $(cat ${ANDROID_SDK_ROOT}/ndk-bundle/source.properties 2>&1 | grep Pkg.Revision | cut -d ' ' -f 3)"
 
 # put it back to the default
-#update-java-alternatives -s "/usr/lib/jvm/adoptopenjdk-8-hotspot-$ARCH"
-export JAVA_HOME=JAVA_HOME_11
+export JAVA_HOME=$JAVA_HOME_11
