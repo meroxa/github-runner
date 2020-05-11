@@ -26,10 +26,14 @@ jobs:
         with:
           fetch-depth: 0
           submodules: true
-      - name: Set up ssh-agent
+      - name: Set up ssh-agent with td-aws-dev
         uses: webcoast-dk/ssh-agent@master
         with:
           ssh-private-key: ${{ secrets.TD_AWS_DEV }}
+      - name: Set up ssh-agent devops_deploy_DEV
+        uses: webcoast-dk/ssh-agent@master
+        with:
+          ssh-private-key: ${{ secrets.DEVOPS_DEPLOY_DEV }}
       - name: Set up packer aws directory
         run: |
           rm -frv aws-1804
@@ -88,10 +92,14 @@ jobs:
         with:
           fetch-depth: 0
           submodules: true
-      - name: Set up ssh-agent
+      - name: Set up ssh-agent with td-aws-dev
         uses: webcoast-dk/ssh-agent@master
         with:
           ssh-private-key: ${{ secrets.TD_AWS_DEV }}
+      - name: Set up ssh-agent with devops_deploy_DEV
+        uses: webcoast-dk/ssh-agent@master
+        with:
+          ssh-private-key: ${{ secrets.DEVOPS_DEPLOY_DEV }}
       - name: Set up packer aws directory
         run: |
           rm -frv aws-1604

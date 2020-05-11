@@ -75,6 +75,7 @@
       "type": "shell",
       "pause_before": "10s",
       "inline": [
+        "echo 127.0.0.1 $(hostname) >> /etc/hosts",
         "apt-get update",
         "apt-get dist-upgrade -y",
         "apt-get -y install --no-install-recommends sudo apt-utils software-properties-common lsb-release rsync gosu",
