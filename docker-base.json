@@ -42,7 +42,6 @@
                 "{{.Image}}"
             ]
         }
-
     ],
     "provisioners": [
         {
@@ -65,13 +64,17 @@
     ],
     "post-processors": [
         {
-            "only": ["bionic"],
+            "only": [
+                "bionic"
+            ],
             "type": "docker-tag",
             "repository": "local/systemd-runner",
             "tag": "bionic"
         },
         {
-            "only": ["xenial"],
+            "only": [
+                "xenial"
+            ],
             "type": "docker-tag",
             "repository": "local/systemd-runner",
             "tag": "xenial"

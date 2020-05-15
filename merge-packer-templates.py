@@ -84,8 +84,8 @@ if __name__ == '__main__':
                                                and 'scripts' in pr
                                                and ('{{template_dir}}/scripts/base/reboot.sh'
                                                     in pr['scripts']
-                                               or '{{template_dir}}/scripts/installers/homebrew-validate.sh'
-                                                   in pr['scripts']))]
+                                                    or '{{template_dir}}/scripts/installers/homebrew-validate.sh'
+                                                    in pr['scripts']))]
     target_template['provisioners'].pop()
 
     json.dump(target_template, args.target_template_path, indent=4)

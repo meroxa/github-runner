@@ -14,4 +14,3 @@ if [[ ! -f "$RUNNER_HOME/actions-runner/.runner" && -x "$RUNNER_HOME/actions-run
 else
   exit 0
 fi
-

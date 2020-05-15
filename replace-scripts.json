@@ -1,6 +1,6 @@
 [
-  {
-    "find": "{{template_dir}}/scripts/installers/docker-moby.sh",
-    "replace": "{{template_dir}}/scripts/installers/docker-ce.sh"
-  }
+    {
+        "find": "{{template_dir}}/scripts/installers/docker-moby.sh",
+        "replace": "{{template_dir}}/scripts/installers/docker-ce.sh"
+    }
 ]

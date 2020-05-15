@@ -1,98 +1,98 @@
 {
-  "variables": {
-    "vcs_ref": "",
-    "runner_user": "runner",
-    "runner_group": "runner",
-    "runner_uid": "1001",
-    "runner_gid": "1001",
-    "runner_home": "/home/runner",
-    "access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
-    "secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
-    "image_folder": "/imagegeneration",
-    "commit_file": "/imagegeneration/commit.txt",
-    "imagedata_file": "/imagegeneration/imagedata.json",
-    "metadata_file": "/imagegeneration/metadatafile",
-    "installer_script_folder": "/imagegeneration/installers",
-    "helper_script_folder": "/imagegeneration/helpers",
-    "image_version": "dev",
-    "image_os": "ubuntu18",
-    "github_feed_token": "{{env `GITHUB_TOKEN`}}",
-    "go_default": "1.14",
-    "go_versions": "1.11 1.12 1.13 1.14"
-  },
-  "sensitive-variables": [
-    "access_key",
-    "secret_key",
-    "github_feed_token"
-  ],
-  "builders": [
-    {
-      "name": "xenial",
-      "region": "us-west-1",
-      "type": "amazon-ebs",
-      "access_key": "{{user `access_key`}}",
-      "secret_key": "{{user `secret_key`}}",
-      "ssh_keypair_name": "td-aws-dev",
-      "ssh_agent_auth": true,
-      "ssh_username": "runner",
-      "subnet_id": "subnet-c3b87cab",
-      "source_ami_filter": {
-        "filters": {
-          "virtualization-type": "hvm",
-          "name": "github-runner-base-xenial",
-          "root-device-type": "ebs"
-        },
-        "owners": [
-          "076613928512"
-        ],
-        "most_recent": true
-      },
-      "instance_type": "t3a.large",
-      "ami_name": "github-runner-xenial-{{isotime \"%Y%m%d%H%M%S\"}}",
-      "ami_regions": [
-        "us-west-1",
-        "us-west-2"
-      ],
-      "tags": {
-        "Name": "github-runner-xenial-{{isotime \"%Y%m%d%H%M%S\"}}-{{user `vcs_ref`}}",
-        "os": "ubuntu",
-        "source": "github-runner",
-        "service": "ci",
-        "env": "dev"
-      },
-      "launch_block_device_mappings": [
+    "variables": {
+        "vcs_ref": "",
+        "runner_user": "runner",
+        "runner_group": "runner",
+        "runner_uid": "1001",
+        "runner_gid": "1001",
+        "runner_home": "/home/runner",
+        "access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+        "secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+        "image_folder": "/imagegeneration",
+        "commit_file": "/imagegeneration/commit.txt",
+        "imagedata_file": "/imagegeneration/imagedata.json",
+        "metadata_file": "/imagegeneration/metadatafile",
+        "installer_script_folder": "/imagegeneration/installers",
+        "helper_script_folder": "/imagegeneration/helpers",
+        "image_version": "dev",
+        "image_os": "ubuntu18",
+        "github_feed_token": "{{env `GITHUB_TOKEN`}}",
+        "go_default": "1.14",
+        "go_versions": "1.11 1.12 1.13 1.14"
+    },
+    "sensitive-variables": [
+        "access_key",
+        "secret_key",
+        "github_feed_token"
+    ],
+    "builders": [
         {
-          "device_name": "/dev/sda1",
-          "volume_size": 1000,
-          "volume_type": "gp2",
-          "delete_on_termination": true
+            "name": "xenial",
+            "region": "us-west-1",
+            "type": "amazon-ebs",
+            "access_key": "{{user `access_key`}}",
+            "secret_key": "{{user `secret_key`}}",
+            "ssh_keypair_name": "td-aws-dev",
+            "ssh_agent_auth": true,
+            "ssh_username": "runner",
+            "subnet_id": "subnet-c3b87cab",
+            "source_ami_filter": {
+                "filters": {
+                    "virtualization-type": "hvm",
+                    "name": "github-runner-base-xenial",
+                    "root-device-type": "ebs"
+                },
+                "owners": [
+                    "076613928512"
+                ],
+                "most_recent": true
+            },
+            "instance_type": "t3a.large",
+            "ami_name": "github-runner-xenial-{{isotime \"%Y%m%d%H%M%S\"}}",
+            "ami_regions": [
+                "us-west-1",
+                "us-west-2"
+            ],
+            "tags": {
+                "Name": "github-runner-xenial-{{isotime \"%Y%m%d%H%M%S\"}}-{{user `vcs_ref`}}",
+                "os": "ubuntu",
+                "source": "github-runner",
+                "service": "ci",
+                "env": "dev"
+            },
+            "launch_block_device_mappings": [
+                {
+                    "device_name": "/dev/sda1",
+                    "volume_size": 1000,
+                    "volume_type": "gp2",
+                    "delete_on_termination": true
+                }
+            ]
         }
-      ]
-    }
-  ],
-  "provisioners": [
-    {
-      "type": "shell",
-      "pause_before": "10s",
-      "inline": [
-        "echo 127.0.0.1 $(hostname) >> /etc/hosts",
-        "apt-get update",
-        "apt-get dist-upgrade -y",
-        "apt-get -y install --no-install-recommends sudo apt-utils software-properties-common lsb-release rsync gosu",
-        "apt-get -y install --no-install-recommends wget curl libunwind8 dos2unix apt-transport-https ca-certificates",
-        "apt-get -y install --no-install-recommends git ruby ohai locales fuse squashfuse hugepages",
-        "locale-gen en_US.UTF-8",
-        "export LANG=en_US.UTF-8 | tee -a /etc/environment",
-        "groupadd -g {{user `runner_gid`}} -r {{user `runner_group`}}",
-        "useradd -u {{user `runner_uid`}} -r -g {{user `runner_gid`}} -md {{user `runner_home`}} -s /bin/bash -c \"GitHub Runner\" {{user `runner_user`}}",
-        "usermod -aG sudo {{user `runner_user`}}",
-        "echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers",
-        "echo 'session required pam_env.so readenv=1' >> /etc/pam.d/sudo"
-      ],
-      "environment_vars": [
-        "DEBIAN_FRONTEND=noninteractive"
-      ],
-      "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
-    }
-  ]
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "pause_before": "10s",
+            "inline": [
+                "echo 127.0.0.1 $(hostname) >> /etc/hosts",
+                "apt-get update",
+                "apt-get dist-upgrade -y",
+                "apt-get -y install --no-install-recommends sudo apt-utils software-properties-common lsb-release rsync gosu",
+                "apt-get -y install --no-install-recommends wget curl libunwind8 dos2unix apt-transport-https ca-certificates",
+                "apt-get -y install --no-install-recommends git ruby ohai locales fuse squashfuse hugepages",
+                "locale-gen en_US.UTF-8",
+                "export LANG=en_US.UTF-8 | tee -a /etc/environment",
+                "groupadd -g {{user `runner_gid`}} -r {{user `runner_group`}}",
+                "useradd -u {{user `runner_uid`}} -r -g {{user `runner_gid`}} -md {{user `runner_home`}} -s /bin/bash -c \"GitHub Runner\" {{user `runner_user`}}",
+                "usermod -aG sudo {{user `runner_user`}}",
+                "echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers",
+                "echo 'session required pam_env.so readenv=1' >> /etc/pam.d/sudo"
+            ],
+            "environment_vars": [
+                "DEBIAN_FRONTEND=noninteractive"
+            ],
+            "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+        }
+    ]
 }
