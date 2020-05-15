@@ -30,6 +30,7 @@ jobs:
             -var secret_key="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
             aws-base.json
   bionic:
+    needs: [base]
     runs-on: [self-hosted]
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     timeout-minutes: 720
