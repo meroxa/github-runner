@@ -6,6 +6,7 @@ on:
     paths:
       - 'actions-runner-config.sh'
       - 'aws-add-provisioners.json'
+      - 'aws-base.json'
       - 'aws-replace-inline.json'
       - 'aws-ubuntu1*04.json'
       - 'merge-packer-templates.py'
@@ -16,6 +17,14 @@ on:
       - 'virtual-environments'
 
 jobs:
+  base:
+    runs-on: [self-hosted]
+    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Build bionic and xenial base with packer
+        run: packer build aws-base.json
   bionic:
     runs-on: [self-hosted]
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
@@ -81,6 +90,7 @@ jobs:
             git push
           fi
   xenial:
+    needs: [base]
     runs-on: [self-hosted]
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     timeout-minutes: 720

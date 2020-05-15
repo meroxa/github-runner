@@ -34,27 +34,27 @@
       "secret_key": "{{user `secret_key`}}",
       "ssh_keypair_name": "td-aws-dev",
       "ssh_agent_auth": true,
-      "ssh_username": "ubuntu",
+      "ssh_username": "runner",
       "subnet_id": "subnet-c3b87cab",
       "source_ami_filter": {
         "filters": {
           "virtualization-type": "hvm",
-          "name": "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*",
+          "name": "github-runner-base-xenial-*",
           "root-device-type": "ebs"
         },
         "owners": [
-          "099720109477"
+          "076613928512"
         ],
         "most_recent": true
       },
       "instance_type": "t3a.large",
-      "ami_name": "github-runner-{{timestamp|clean_resource_name}}-{{user `vcs_ref`}}",
+      "ami_name": "github-runner-xenial-{{timestamp|clean_resource_name}}-{{user `vcs_ref`}}",
       "ami_regions": [
         "us-west-1",
         "us-west-2"
       ],
       "tags": {
-        "Name": "github-runner-{{timestamp|clean_resource_name}}-{{user `vcs_ref`}}",
+        "Name": "github-runner-xenial-{{timestamp|clean_resource_name}}-{{user `vcs_ref`}}",
         "os": "ubuntu",
         "source": "github-runner",
         "service": "ci",
