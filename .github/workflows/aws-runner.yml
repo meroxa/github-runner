@@ -24,7 +24,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
       - name: Build bionic and xenial base with packer
-        run: packer build aws-base.json
+        run: |
+          packer build \
+            -var access_key="${{ secrets.AWS_ACCESS_KEY_ID }}" \
+            -var secret_key="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+            aws-base.json
   bionic:
     runs-on: [self-hosted]
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
