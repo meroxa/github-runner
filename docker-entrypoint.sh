@@ -21,9 +21,9 @@ if [[ ! -t 0 ]]; then
 fi
 
 ##
-# The base image from https://github.com/terradatum/docker-systemd includes a systemd target which accounts for a CMD
-# This checks to make sure there is no CMD, and creates the creates the environment for the github-runner service
-# to be configured and run.
+# The base image from https://github.com/terradatum/docker-systemd includes a systemd target which accounts for a CMD.
+# This checks to make sure there is no CMD, and creates the environment for the github-runner service to be configured
+# and run.
 if [ $# -eq 0 ]; then
 
   {
