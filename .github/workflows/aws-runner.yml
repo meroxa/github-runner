@@ -17,7 +17,20 @@ on:
       - 'virtual-environments'
 
 jobs:
+  root:
+    runs-on: [self-hosted]
+    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Build bionic and xenial root with packer
+        run: |
+          packer build \
+            -var access_key="${{ secrets.AWS_ACCESS_KEY_ID }}" \
+            -var secret_key="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+            aws-root.json
   base:
+    needs: [root]
     runs-on: [self-hosted]
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     steps:

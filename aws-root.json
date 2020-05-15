@@ -17,28 +17,28 @@
             "secret_key": "{{user `secret_key`}}",
             "ssh_keypair_name": "td-aws-dev",
             "ssh_agent_auth": true,
-            "ssh_username": "root",
+            "ssh_username": "ubuntu",
             "subnet_id": "subnet-c3b87cab",
             "source_ami_filter": {
                 "filters": {
                     "virtualization-type": "hvm",
-                    "name": "root-bionic",
+                    "name": "ubuntu/images/*ubuntu-bionic-18.04-amd64-server-*",
                     "root-device-type": "ebs"
                 },
                 "owners": [
-                    "076613928512"
+                    "679593333241"
                 ],
                 "most_recent": true
             },
             "instance_type": "t3a.large",
-            "ami_name": "github-runner-base-bionic",
+            "ami_name": "root-bionic",
             "force_deregister": true,
             "ami_regions": [
                 "us-west-1",
                 "us-west-2"
             ],
             "tags": {
-                "Name": "github-runner-base-bionic-{{isotime \"%Y%m%d%H%M%S\"}}-{{user `vcs_ref`}}",
+                "Name": "root-bionic-{{isotime \"%Y%m%d%H%M%S\"}}-{{user `vcs_ref`}}",
                 "os": "ubuntu",
                 "source": "github-runner",
                 "service": "ci",
@@ -61,28 +61,28 @@
             "secret_key": "{{user `secret_key`}}",
             "ssh_keypair_name": "td-aws-dev",
             "ssh_agent_auth": true,
-            "ssh_username": "root",
+            "ssh_username": "ubuntu",
             "subnet_id": "subnet-c3b87cab",
             "source_ami_filter": {
                 "filters": {
                     "virtualization-type": "hvm",
-                    "name": "root-xenial",
+                    "name": "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*",
                     "root-device-type": "ebs"
                 },
                 "owners": [
-                    "076613928512"
+                    "099720109477"
                 ],
                 "most_recent": true
             },
             "instance_type": "t3a.large",
-            "ami_name": "github-runner-base-xenial",
+            "ami_name": "root-xenial",
             "force_deregister": true,
             "ami_regions": [
                 "us-west-1",
                 "us-west-2"
             ],
             "tags": {
-                "Name": "github-runner-base-xenial-{{isotime \"%Y%m%d%H%M%S\"}}-{{user `vcs_ref`}}",
+                "Name": "root-xenial-{{isotime \"%Y%m%d%H%M%S\"}}-{{user `vcs_ref`}}",
                 "os": "ubuntu",
                 "source": "github-runner",
                 "service": "ci",
@@ -104,10 +104,8 @@
             "pause_before": "10s",
             "inline": [
                 "apt-get update",
-                "usermod --login runner --move-home --home /home/runner ubuntu",
-                "groupmob --new-name runner ubuntu",
-                "sed -i 's/sudo\\sALL=(ALL:ALL)\\sALL/sudo ALL=(ALL) NOPASSWD:ALL/g' /etc/sudoers",
-                "echo 'session required pam_env.so readenv=1' >> /etc/pam.d/sudo"
+                "sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin prohibit-password/g' /etc/ssh/sshd_config",
+                "cp -fv /home/ubuntu/.ssh/authorized_keys /root/.ssh/"
             ],
             "environment_vars": [
                 "DEBIAN_FRONTEND=noninteractive"
