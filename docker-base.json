@@ -51,7 +51,7 @@
                 "apt-get update",
                 "apt-get install -y --no-install-recommends sudo",
                 "groupadd -g $RUNNER_GID -r $RUNNER_GROUP",
-                "useradd -u $RUNNER_UID -r -g $RUNNER_GID -md $RUNNER_HOME -s /bin/bash -c \"GitHub Runner\" $RUNNER_USER",
+                "useradd -u $RUNNER_UID -r -g $RUNNER_GID -md $RUNNER_HOME -s /bin/bash -c \"GitHub Actions Runner\" $RUNNER_USER",
                 "usermod -aG sudo $RUNNER_USER",
                 "echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers",
                 "echo 'session required pam_env.so readenv=1' >> /etc/pam.d/sudo"
