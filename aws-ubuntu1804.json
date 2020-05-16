@@ -1,10 +1,6 @@
 {
     "variables": {
         "vcs_ref": "",
-        "runner_user": "runner",
-        "runner_group": "runner",
-        "runner_uid": "1001",
-        "runner_gid": "1001",
         "runner_home": "/home/runner",
         "access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
         "secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
@@ -81,12 +77,7 @@
                 "apt-get -y install --no-install-recommends wget curl libunwind8 dos2unix apt-transport-https ca-certificates",
                 "apt-get -y install --no-install-recommends git ruby ohai locales fuse squashfuse hugepages",
                 "locale-gen en_US.UTF-8",
-                "export LANG=en_US.UTF-8 | tee -a /etc/environment",
-                "groupadd -g {{user `runner_gid`}} -r {{user `runner_group`}}",
-                "useradd -u {{user `runner_uid`}} -r -g {{user `runner_gid`}} -md {{user `runner_home`}} -s /bin/bash -c \"GitHub Runner\" {{user `runner_user`}}",
-                "usermod -aG sudo {{user `runner_user`}}",
-                "echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers",
-                "echo 'session required pam_env.so readenv=1' >> /etc/pam.d/sudo"
+                "export LANG=en_US.UTF-8 | tee -a /etc/environment"
             ],
             "environment_vars": [
                 "DEBIAN_FRONTEND=noninteractive"

@@ -50,14 +50,19 @@
             "inline": [
                 "apt-get update",
                 "apt-get install -y --no-install-recommends sudo",
-                "groupadd -g {{user `runner_gid`}} -r {{user `runner_group`}}",
-                "useradd -u {{user `runner_uid`}} -r -g {{user `runner_gid`}} -md {{user `runner_home`}} -s /bin/bash -c \"GitHub Runner\" {{user `runner_user`}}",
-                "usermod -aG sudo {{user `runner_user`}}",
+                "groupadd -g $RUNNER_GID -r $RUNNER_GROUP",
+                "useradd -u $RUNNER_UID -r -g $RUNNER_GID -md $RUNNER_HOME -s /bin/bash -c \"GitHub Runner\" $RUNNER_USER",
+                "usermod -aG sudo $RUNNER_USER",
                 "echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers",
                 "echo 'session required pam_env.so readenv=1' >> /etc/pam.d/sudo"
             ],
             "environment_vars": [
-                "DEBIAN_FRONTEND=noninteractive"
+                "DEBIAN_FRONTEND=noninteractive",
+                "RUNNER_USER={{user `runner_user}}",
+                "RUNNER_GROUP={{user `runner_group}}",
+                "RUNNER_UID={{user `runner_uid}}",
+                "RUNNER_GID={{user `runner_gid`}}",
+                "RUNNER_HOME={{user `runner_home`}}"
             ],
             "execute_command": "sh -c '{{ .Vars }} {{ .Path }}'"
         }

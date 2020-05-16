@@ -26,10 +26,13 @@
                 "mv /tmp/github-runner-env /etc/",
                 "mv /tmp/github-runner-config.service /etc/systemd/system/",
                 "mv /tmp/github-runner.service /etc/systemd/system/",
-                "mv /tmp/actions-runner-config.sh /home/runner/",
+                "mv /tmp/actions-runner-config.sh \"$RUNNER_HOME\"/",
                 "chmod 0644 /etc/github-runner-env",
                 "chmod 0644 /etc/systemd/system/github*",
-                "chmod 0700 /home/runner/actions-runner-config.sh"
+                "chmod 0700 \"$RUNNER_HOME/actions-runner-config.sh\""
+            ],
+            "environment_vars": [
+                "RUNNER_HOME={{user `runner_home`}}"
             ],
             "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
         },
@@ -44,7 +47,7 @@
                 "METADATA_FILE={{user `metadata_file`}}",
                 "HELPER_SCRIPTS={{user `helper_script_folder`}}",
                 "DEBIAN_FRONTEND=noninteractive",
-                "RUNNER_HOME=/home/runner"
+                "RUNNER_HOME={{user `runner_home`}}"
             ],
             "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
         }

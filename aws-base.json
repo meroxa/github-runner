@@ -2,8 +2,6 @@
     "variables": {
         "runner_user": "runner",
         "runner_group": "runner",
-        "runner_uid": "1000",
-        "runner_gid": "1000",
         "runner_home": "/home/runner",
         "access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
         "secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}"
@@ -104,13 +102,16 @@
             "pause_before": "10s",
             "inline": [
                 "apt-get update",
-                "usermod --login runner --move-home --home /home/runner ubuntu",
-                "groupmob --new-name runner ubuntu",
+                "usermod --login $RUNNER_USER --move-home --home $RUNNER_HOME ubuntu",
+                "groupmob --new-name $RUNNER_GROUP ubuntu",
                 "sed -i 's/sudo\\sALL=(ALL:ALL)\\sALL/sudo ALL=(ALL) NOPASSWD:ALL/g' /etc/sudoers",
                 "echo 'session required pam_env.so readenv=1' >> /etc/pam.d/sudo"
             ],
             "environment_vars": [
-                "DEBIAN_FRONTEND=noninteractive"
+                "DEBIAN_FRONTEND=noninteractive",
+                "RUNNER_USER={{user `runner_user}}",
+                "RUNNER_GROUP={{user `runner_group}}",
+                "RUNNER_HOME={{user `runner_home`}}"
             ],
             "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
         }
