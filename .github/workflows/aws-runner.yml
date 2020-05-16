@@ -17,24 +17,7 @@ on:
       - 'virtual-environments'
 
 jobs:
-  root:
-    runs-on: [self-hosted]
-    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
-    steps:
-      - name: Checkout
-        uses: actions/checkout@master
-      - name: Set up ssh-agent with td-aws-dev
-        uses: webcoast-dk/ssh-agent@master
-        with:
-          ssh-private-key: ${{ secrets.TD_AWS_DEV }}
-      - name: Build bionic and xenial root with packer
-        run: |
-          packer build \
-            -var access_key="${{ secrets.AWS_ACCESS_KEY_ID }}" \
-            -var secret_key="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
-            aws-root.json
   base:
-    needs: [root]
     runs-on: [self-hosted]
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     steps:
@@ -46,6 +29,9 @@ jobs:
           ssh-private-key: ${{ secrets.TD_AWS_DEV }}
       - name: Build bionic and xenial base with packer
         run: |
+          export AWS_MAX_ATTEMPTS=360
+          export AWS_POLL_DELAY_SECONDS=10
+          export PACKER_LOG=1
           packer build \
             -var access_key="${{ secrets.AWS_ACCESS_KEY_ID }}" \
             -var secret_key="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
