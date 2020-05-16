@@ -2,6 +2,7 @@
 
 import argparse
 import json
+from typing import Dict, List, Any, Union
 
 parser = argparse.ArgumentParser('merge-packer-templates')
 parser.add_argument('--inject-env', '-e',
@@ -30,7 +31,6 @@ parser.add_argument('--add-provisioners', '-a',
                          'just before the "clean" script.')
 parser.add_argument('--replace-scripts', '-r',
                     dest='replace_scripts_path',
-                    default='replace-scripts.json',
                     type=argparse.FileType('rt'),
                     help='The replace-scripts file. Scripts to be replaced in provisioners')
 parser.add_argument('--replace-inline', '-i',
@@ -46,11 +46,13 @@ parser.add_argument('--target', '-t',
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    target_template = {}
+    target_template: Dict[str, Union[List[Any], Any]] = {}
     upstream_template = json.load(args.upstream_template_path)
     runner_template = json.load(args.runner_template_path)
     add_provisioners_template = json.load(args.add_provisioners_path)
-    replace_scripts = json.load(args.replace_scripts_path)
+    replace_scripts = None
+    if args.replace_scripts_path:
+        replace_scripts = json.load(args.replace_scripts_path)
     replace_inline = json.load(args.replace_inline_path)
 
     target_template['variables'] = runner_template['variables']
@@ -61,7 +63,7 @@ if __name__ == '__main__':
         target_template['post-processors'] = runner_template['post-processors']
 
     for pr in target_template['provisioners']:
-        if 'scripts' in pr:
+        if 'scripts' in pr and replace_scripts is not None:
             pr['scripts'] = [r['replace'] if s == r['find'] else s for s in pr['scripts'] for r in replace_scripts]
         if 'inline' in pr:
             pr['inline'] = [r['replace'] if s == r['find'] else s for s in pr['inline'] for r in replace_inline]

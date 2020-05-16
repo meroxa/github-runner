@@ -55,8 +55,7 @@ jobs:
             -t docker-1804/ubuntu1804.json \
             -u virtual-environments/images/linux/ubuntu1804.json \
             -g docker-ubuntu1804.json \
-            -a docker-add-provisioners.json \
-            -r replace-scripts.json
+            -a docker-add-provisioners.json
       - name: Build 1804 with packer
         run: |
           cd docker-1804
@@ -117,8 +116,7 @@ jobs:
             -t docker-1604/ubuntu1604.json \
             -u virtual-environments/images/linux/ubuntu1604.json \
             -g docker-ubuntu1604.json \
-            -a docker-add-provisioners.json \
-            -r replace-scripts.json
+            -a docker-add-provisioners.json
       - name: Build 1604 with packer
         run: |
           cd docker-1604

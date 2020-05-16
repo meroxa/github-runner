@@ -68,8 +68,7 @@ jobs:
             -u virtual-environments/images/linux/ubuntu1804.json \
             -g aws-ubuntu1804.json \
             -a aws-add-provisioners.json \
-            -i aws-replace-inline.json \
-            -r replace-scripts.json
+            -i aws-replace-inline.json
       - name: Build 1804 with packer
         run: |
           cd aws-1804
@@ -133,8 +132,7 @@ jobs:
             -u virtual-environments/images/linux/ubuntu1604.json \
             -g aws-ubuntu1604.json \
             -a aws-add-provisioners.json \
-            -i aws-replace-inline.json \
-            -r replace-scripts.json
+            -i aws-replace-inline.json
       - name: Build 1604 with packer
         run: |
           cd aws-1604
