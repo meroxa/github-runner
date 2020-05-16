@@ -109,8 +109,8 @@
             ],
             "environment_vars": [
                 "DEBIAN_FRONTEND=noninteractive",
-                "RUNNER_USER={{user `runner_user}}",
-                "RUNNER_GROUP={{user `runner_group}}",
+                "RUNNER_USER={{user `runner_user`}}",
+                "RUNNER_GROUP={{user `runner_group`}}",
                 "RUNNER_HOME={{user `runner_home`}}"
             ],
             "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"

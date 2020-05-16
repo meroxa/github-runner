@@ -3,23 +3,26 @@
 ![Deploy - GitHub Actions Runner in Docker][build-badge]
 [![Docker Pulls][docker-pulls]][docker-hub]
 
-Originally found at [myoung34/docker-github-actions-runner][myoung34-github-runner] with ideas from [tcardonne/docker-github-runner][tcardonne-github-runner].
-
 ## Description
 
-This will run the [new self-hosted github actions runners][self-hosted-runners]. It is built with [packer][packer] and 
+This will build the [new self-hosted github actions runners][self-hosted-runners]. It is built with [packer][packer] and 
 builds Docker images and Amazon AMIs. The packer template is derived from the GitHub project and various pieces needed
 to make the Docker or AWS images work.
 
 * [Docker Hub][docker-hub]
-* [AWS AMI][]
+* AWS AMI - because the AMI is based on the Official AWS Marketplace Ubuntu AMIs, the results of this build process cannot
+be made public. Building the Ubuntu via a seed file is possible, if someone wants to contribute a PR.
 
-The original project by @myoung34 focuses on a minimal installation of tools. There the guiding principle is to create 
-the most basic docker image necessary to run GitHub actions. The advantage to following that principle is that [developers 
+### History
+
+Originally found at [myoung34/docker-github-actions-runner][myoung34-github-runner] with ideas from [tcardonne/docker-
+github-runner][tcardonne-github-runner].
+
+The project by @myoung34 focuses on a minimal installation of tools. There the guiding principle is to create the most 
+basic docker image necessary to run GitHub actions. The advantage to following that principle is that [developers 
 can then declare and configure their tools as they see fit][github-runner-lite], and don't have to "fight" the runner to 
 get things arranged properly.
 
-The drawback to that model is that every workflow has to include the machinery they need to setup and run their build. 
 The guiding principle of the GitHub hosted runners follows a different path, more of an "everything, including the 
 kitchen sink" approach, where almost any tool and SDK have already been installed and are ready for use out-of-the-box. 
 The majority of the installation scripts used by the GitHub Hosted runners are re-purposed here via a submodule pointing 
@@ -53,21 +56,102 @@ with DBus and UDEV available to help manage IPC and devices. Without these servi
 For instance, without UDEV, the snapd service has significant issues.
 
 This isn't such a big deal in the AWS AMI image, but for Docker, it's much more challenging. The upstream [docker-systemd][docker-systemd]
-is built and available on [Docker hub][docker-systemd-hub].
+is built and available on [Docker hub][docker-systemd-hub]. Make sure to go there and read about it if you're curious how
+systemd is arranged to work in Docker.
 
-## Build args
+## Packer Build vars
 
 The following build args allow you to control the configuration at build time.
 
-| Name | Description | Default value |
-|---|---|---|
-| `BUILD_DATE` | The build date of the image. Used to set the `org.label-schema.build-date` image label | `$(date -u +'%Y-%m-%dT%H:%M:%SZ')` |
-| `VCS_REF` | The git commit hash of the build. Used to set the `org.label-schema.vcs-ref` image label | `${GITHUB_SHA::8}` |
-| `TARGETPLATFORM` | The target platform for the build. One of `linux/amd64`, `linux/arm/v7` or `linux/arm64` | `linux/amd64` |
-| `UID` | The UID to use for the user | `1000` |
-| `GID` | The GID to use for the user's group | `1000` |
-| `USER` | The name of the user to run as | `runner` |
-| `GROUP` | The name of runner user's group | `runner` |
+### AWS
+
+**aws-root.json:**
+```json
+{
+"variables": {
+        "access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+        "secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}"
+    }
+}
+```
+
+**aws-base.json:**
+```json
+{
+    "variables": {
+        "runner_user": "runner",
+        "runner_group": "runner",
+        "runner_home": "/home/runner",
+        "access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+        "secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}"
+    }
+}
+```
+
+**aws-ubuntu1N04.json:**
+```json
+{
+    "variables": {
+        "vcs_ref": "",
+        "runner_home": "/home/runner",
+        "access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+        "secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+        "image_folder": "/imagegeneration",
+        "commit_file": "/imagegeneration/commit.txt",
+        "imagedata_file": "/imagegeneration/imagedata.json",
+        "metadata_file": "/imagegeneration/metadatafile",
+        "installer_script_folder": "/imagegeneration/installers",
+        "helper_script_folder": "/imagegeneration/helpers",
+        "image_version": "dev",
+        "image_os": "ubuntu18",
+        "github_feed_token": "{{env `GITHUB_TOKEN`}}",
+        "go_default": "1.14",
+        "go_versions": "1.11 1.12 1.13 1.14"
+    }
+}
+```
+
+### Docker
+
+**docker-base.json:**
+```json
+{
+    "variables": {
+        "runner_user": "runner",
+        "runner_group": "runner",
+        "runner_uid": "1000",
+        "runner_gid": "1000",
+        "runner_home": "/home/runner"
+    }
+}
+```
+
+**docker-ubuntu1N04.json:**
+```json
+{
+    "variables": {
+        "vcs_ref": "",
+        "build_date": "",
+        "runner_uid": "1000",
+        "runner_gid": "1000",
+        "runner_home": "/home/runner",
+        "commit_url": "{{env `COMMIT_URL`}}",
+        "docker_username": "{{env `DOCKER_USERNAME`}}",
+        "docker_password": "{{env `DOCKER_PASSWORD`}}",
+        "image_folder": "/imagegeneration",
+        "commit_file": "/imagegeneration/commit.txt",
+        "imagedata_file": "/imagegeneration/imagedata.json",
+        "metadata_file": "/imagegeneration/metadatafile",
+        "installer_script_folder": "/imagegeneration/installers",
+        "helper_script_folder": "/imagegeneration/helpers",
+        "image_version": "dev",
+        "image_os": "ubuntu18",
+        "github_feed_token": "{{env `GITHUB_TOKEN`}}",
+        "go_default": "1.14",
+        "go_versions": "1.11 1.12 1.13 1.14"
+    }
+}
+```
 
 ## Environment variables
 
@@ -202,6 +286,8 @@ docker run -d --restart always \
   --device=/dev/fuse \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
+  -v /dev/hugepages:/dev/hugepages \
+  -v /sys/fs/fuse/connections:/sys/fs/fuse/connections \
   -v github-runner:/home/runner \
   -e RUNNER_REPOSITORY_URL="https://github.com/terradatum/repo" \
   -e RUNNER_NAME="foo-runner" \
@@ -228,6 +314,8 @@ function github-runner {
         --device=/dev/fuse \
         -v /var/run/docker.sock:/var/run/docker.sock \
         -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
+        -v /dev/hugepages:/dev/hugepages \
+        -v /sys/fs/fuse/connections:/sys/fs/fuse/connections \
         -v github-runner:/home/runner \
         -e RUNNER_REPOSITORY_URL="https://github.com/${org}/${repo}" \
         -e RUNNER_TOKEN="$2" \
@@ -249,6 +337,8 @@ function github-runner-pat {
         --device=/dev/fuse \
         -v /var/run/docker.sock:/var/run/docker.sock \
         -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
+        -v /dev/hugepages:/dev/hugepages \
+        -v /sys/fs/fuse/connections:/sys/fs/fuse/connections \
         -v github-runner:/home/runner \
         -e ACCESS_TOKEN="$2" \
         -e RUNNER_REPOSITORY_URL="https://github.com/${org}/${repo}" \

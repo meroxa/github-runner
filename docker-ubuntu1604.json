@@ -4,6 +4,7 @@
         "build_date": "",
         "runner_uid": "1000",
         "runner_gid": "1000",
+        "runner_home": "/home/runner",
         "commit_url": "{{env `COMMIT_URL`}}",
         "docker_username": "{{env `DOCKER_USERNAME`}}",
         "docker_password": "{{env `DOCKER_PASSWORD`}}",
