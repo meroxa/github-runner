@@ -23,6 +23,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
+      - name: Set up ssh-agent with td-aws-dev
+        uses: webcoast-dk/ssh-agent@master
+        with:
+          ssh-private-key: ${{ secrets.TD_AWS_DEV }}
       - name: Build bionic and xenial root with packer
         run: |
           packer build \
@@ -36,6 +40,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
+      - name: Set up ssh-agent with td-aws-dev
+        uses: webcoast-dk/ssh-agent@master
+        with:
+          ssh-private-key: ${{ secrets.TD_AWS_DEV }}
       - name: Build bionic and xenial base with packer
         run: |
           packer build \
