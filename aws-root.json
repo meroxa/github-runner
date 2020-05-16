@@ -28,6 +28,7 @@
             "instance_type": "t3a.large",
             "ami_name": "root-bionic",
             "force_deregister": true,
+            "force_delete_snapshot": true,
             "ami_regions": [
                 "us-west-1",
                 "us-west-2"
@@ -72,6 +73,7 @@
             "instance_type": "t3a.large",
             "ami_name": "root-xenial",
             "force_deregister": true,
+            "force_delete_snapshot": true,
             "ami_regions": [
                 "us-west-1",
                 "us-west-2"
