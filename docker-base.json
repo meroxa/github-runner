@@ -58,9 +58,9 @@
             ],
             "environment_vars": [
                 "DEBIAN_FRONTEND=noninteractive",
-                "RUNNER_USER={{user `runner_user}}",
-                "RUNNER_GROUP={{user `runner_group}}",
-                "RUNNER_UID={{user `runner_uid}}",
+                "RUNNER_USER={{user `runner_user`}}",
+                "RUNNER_GROUP={{user `runner_group`}}",
+                "RUNNER_UID={{user `runner_uid`}}",
                 "RUNNER_GID={{user `runner_gid`}}",
                 "RUNNER_HOME={{user `runner_home`}}"
             ],

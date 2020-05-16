@@ -1,6 +1,7 @@
-# NOTE: This entire README needs to be updated - Docker Github Actions Runner
+# Github Actions Runner for Docker and AWS
 
-![Deploy - GitHub Actions Runner in Docker][build-badge]
+![GitHub Actions Runner in Docker][docker-build-badge]
+![GitHub Actions Runner in AWS EC2][aws-ec2-build-badge]
 [![Docker Pulls][docker-pulls]][docker-hub]
 
 ## Description
@@ -59,34 +60,30 @@ This isn't such a big deal in the AWS AMI image, but for Docker, it's much more 
 is built and available on [Docker hub][docker-systemd-hub]. Make sure to go there and read about it if you're curious how
 systemd is arranged to work in Docker.
 
-## Packer Build vars
+## Packer Build
 
-The following build args allow you to control the configuration at build time.
+In essence, the final outcome of the build is to create a `github-runner` Docker image or AMI, whether for Bionic (18.04)
+or Xenial (16.04).
 
 ### AWS
 
-**aws-root.json:**
-```json
-{
-"variables": {
-        "access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
-        "secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}"
-    }
-}
-```
-
 **aws-base.json:**
+
+This resets the `/etc/cloud/cloud.cfg` `default_user` from `ubuntu` to `runner`.
+
 ```json
 {
     "variables": {
         "runner_user": "runner",
-        "runner_group": "runner",
-        "runner_home": "/home/runner",
         "access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
         "secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}"
     }
 }
 ```
+
+This is merged with `virtual-environments/images/linux/ubuntu1N04.json` "parent" packer file, in conjunction with 
+`aws-add-provisioners.json`, `aws-replace-inline.json` and `replace-scripts.json` to generate a final template used for
+building the AMI.
 
 **aws-ubuntu1N04.json:**
 ```json
@@ -113,6 +110,8 @@ The following build args allow you to control the configuration at build time.
 
 ### Docker
 
+Adds the default `runner` user, and sets it up for password-less sudo.
+
 **docker-base.json:**
 ```json
 {
@@ -125,6 +124,9 @@ The following build args allow you to control the configuration at build time.
     }
 }
 ```
+
+This is merged with `virtual-environments/images/linux/ubuntu1N04.json` "parent" packer file, in conjunction with 
+`docker-add-provisioners.json`, and `replace-scripts.json` to generate a final template used for building the Docker image.
 
 **docker-ubuntu1N04.json:**
 ```json
@@ -506,10 +508,10 @@ docker run -d --restart always --name github-runner \
   terradatum/github-runner:latest
 ```
 
-[build-badge]: https://github.com/terradatum/github-runner/workflows/GitHub%20Actions%20Runner%20in%20Docker%20-%20Latest/badge.svg
+[docker-build-badge]: https://github.com/terradatum/github-runner/workflows/GitHub%20Actions%20Runner%20in%20Docker/badge.svg
+[aws-ec2-build-badge]: https://github.com/terradatum/github-runner/workflows/GitHub%20Actions%20Runner%20in%20AWS%20EC2/badge.svg
 [docker-pulls]: https://img.shields.io/docker/pulls/terradatum/github-runner
 [docker-hub]: https://hub.docker.com/r/terradatum/github-runner
-[aws-ami]: 
 [myoung34-github-runner]: https://github.com/myoung34/docker-github-actions-runner
 [tcardonne-github-runner]: https://github.com/tcardonne/docker-github-runner
 [self-hosted-runners]: https://help.github.com/en/actions/automating-your-workflow-with-github-actions/hosting-your-own-runners

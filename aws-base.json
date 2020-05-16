@@ -1,8 +1,6 @@
 {
     "variables": {
         "runner_user": "runner",
-        "runner_group": "runner",
-        "runner_home": "/home/runner",
         "access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
         "secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}"
     },
@@ -15,16 +13,17 @@
             "secret_key": "{{user `secret_key`}}",
             "ssh_keypair_name": "td-aws-dev",
             "ssh_agent_auth": true,
-            "ssh_username": "root",
+            "ssh_username": "ubuntu",
             "subnet_id": "subnet-c3b87cab",
+            "security_group_ids": "sg-01c54a64",
             "source_ami_filter": {
                 "filters": {
                     "virtualization-type": "hvm",
-                    "name": "root-bionic",
+                    "name": "ubuntu/images/*ubuntu-bionic-18.04-amd64-server-*",
                     "root-device-type": "ebs"
                 },
                 "owners": [
-                    "076613928512"
+                    "679593333241"
                 ],
                 "most_recent": true
             },
@@ -60,16 +59,17 @@
             "secret_key": "{{user `secret_key`}}",
             "ssh_keypair_name": "td-aws-dev",
             "ssh_agent_auth": true,
-            "ssh_username": "root",
+            "ssh_username": "ubuntu",
             "subnet_id": "subnet-c3b87cab",
+            "security_group_ids": "sg-01c54a64",
             "source_ami_filter": {
                 "filters": {
                     "virtualization-type": "hvm",
-                    "name": "root-xenial",
+                    "name": "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*",
                     "root-device-type": "ebs"
                 },
                 "owners": [
-                    "076613928512"
+                    "099720109477"
                 ],
                 "most_recent": true
             },
@@ -104,16 +104,12 @@
             "pause_before": "10s",
             "inline": [
                 "apt-get update",
-                "usermod --login $RUNNER_USER --move-home --home $RUNNER_HOME ubuntu",
-                "groupmob --new-name $RUNNER_GROUP ubuntu",
-                "sed -i 's/sudo\\sALL=(ALL:ALL)\\sALL/sudo ALL=(ALL) NOPASSWD:ALL/g' /etc/sudoers",
+                "sed -i 's/name: ubuntu/name: {{user `runner_user`}}/g' /etc/cloud/cloud.cfg",
+                "sed -i 's/gecos: Ubuntu/gecos: GitHub Actions Runner/g' /etc/cloud/cloud.cfg",
                 "echo 'session required pam_env.so readenv=1' >> /etc/pam.d/sudo"
             ],
             "environment_vars": [
-                "DEBIAN_FRONTEND=noninteractive",
-                "RUNNER_USER={{user `runner_user`}}",
-                "RUNNER_GROUP={{user `runner_group`}}",
-                "RUNNER_HOME={{user `runner_home`}}"
+                "DEBIAN_FRONTEND=noninteractive"
             ],
             "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
         }

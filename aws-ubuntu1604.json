@@ -32,6 +32,7 @@
             "ssh_agent_auth": true,
             "ssh_username": "runner",
             "subnet_id": "subnet-c3b87cab",
+            "security_group_ids": "sg-01c54a64",
             "source_ami_filter": {
                 "filters": {
                     "virtualization-type": "hvm",
