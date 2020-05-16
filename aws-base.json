@@ -15,10 +15,6 @@
             "ssh_agent_auth": true,
             "ssh_username": "ubuntu",
             "subnet_id": "subnet-c3b87cab",
-            "security_group_ids": [
-                "sg-01c54a64",
-                "sg-ccf91aa3"
-            ],
             "source_ami_filter": {
                 "filters": {
                     "virtualization-type": "hvm",
@@ -64,10 +60,6 @@
             "ssh_agent_auth": true,
             "ssh_username": "ubuntu",
             "subnet_id": "subnet-c3b87cab",
-            "security_group_ids": [
-                "sg-01c54a64",
-                "sg-ccf91aa3"
-            ],
             "source_ami_filter": {
                 "filters": {
                     "virtualization-type": "hvm",
