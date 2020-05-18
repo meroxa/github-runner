@@ -1,4 +1,5 @@
-RUNNER_REPOSITORY_URL=https://github.com/terradatum/github-runner
+RUNNER_NAME=terradatum
+RUNNER_REPOSITORY_URL=https://github.com/terradatum
 RUNNER_TOKEN=THISISYOURRUNNERTOKEN
 RUNNER_REPLACE=--replace
 RUNNER_LABELS=--labels ec2

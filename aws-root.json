@@ -1,6 +1,5 @@
 {
     "variables": {
-        "runner_user": "runner",
         "access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
         "secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}"
     },
@@ -13,21 +12,21 @@
             "secret_key": "{{user `secret_key`}}",
             "ssh_keypair_name": "td-aws-dev",
             "ssh_agent_auth": true,
-            "ssh_username": "root",
+            "ssh_username": "ubuntu",
             "subnet_id": "subnet-c3b87cab",
             "source_ami_filter": {
                 "filters": {
                     "virtualization-type": "hvm",
-                    "name": "root-bionic",
+                    "name": "ubuntu/images/*ubuntu-bionic-18.04-amd64-server-*",
                     "root-device-type": "ebs"
                 },
                 "owners": [
-                    "076613928512"
+                    "679593333241"
                 ],
                 "most_recent": true
             },
             "instance_type": "t3a.large",
-            "ami_name": "github-runner-base-bionic",
+            "ami_name": "root-bionic",
             "force_deregister": true,
             "force_delete_snapshot": true,
             "ami_regions": [
@@ -35,7 +34,7 @@
                 "us-west-2"
             ],
             "tags": {
-                "Name": "github-runner-base-bionic-{{isotime \"20060102150405\"}}",
+                "Name": "root-bionic-{{isotime \"20060102150405\"}}",
                 "os": "ubuntu",
                 "source": "github-runner",
                 "service": "ci",
@@ -58,21 +57,21 @@
             "secret_key": "{{user `secret_key`}}",
             "ssh_keypair_name": "td-aws-dev",
             "ssh_agent_auth": true,
-            "ssh_username": "root",
+            "ssh_username": "ubuntu",
             "subnet_id": "subnet-c3b87cab",
             "source_ami_filter": {
                 "filters": {
                     "virtualization-type": "hvm",
-                    "name": "root-xenial",
+                    "name": "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*",
                     "root-device-type": "ebs"
                 },
                 "owners": [
-                    "076613928512"
+                    "099720109477"
                 ],
                 "most_recent": true
             },
             "instance_type": "t3a.large",
-            "ami_name": "github-runner-base-xenial",
+            "ami_name": "root-xenial",
             "force_deregister": true,
             "force_delete_snapshot": true,
             "ami_regions": [
@@ -80,7 +79,7 @@
                 "us-west-2"
             ],
             "tags": {
-                "Name": "github-runner-base-xenial-{{isotime \"20060102150405\"}}",
+                "Name": "root-xenial-{{isotime \"20060102150405\"}}",
                 "os": "ubuntu",
                 "source": "github-runner",
                 "service": "ci",
@@ -98,22 +97,12 @@
     ],
     "provisioners": [
         {
-            "type": "file",
-            "source": "{{template_dir}}/etc/hosts",
-            "destination": "/etc/hosts"
-        },
-        {
             "type": "shell",
             "inline": [
                 "echo 127.0.0.1 $(hostname) >> /etc/hosts",
-                "sed -i 's/disable_root: false/disable_root: true/g' /etc/cloud/cloud.cfg",
-                "usermod --login {{user `runner_user`}} --move-home --home /home/{{user `runner_user`}} ubuntu",
-                "groupmod --new-name {{user `runner_user`}} ubuntu",
-                "apt-get -y -o Dpkg::Options::=\"--force-confdef\" -o Dpkg::Options::=\"--force-confold\" dist-upgrade",
                 "sed -i 's/disable_root: true/disable_root: false/g' /etc/cloud/cloud.cfg",
-                "sed -i 's/name: ubuntu/name: {{user `runner_user`}}/g' /etc/cloud/cloud.cfg",
-                "sed -i 's/gecos: Ubuntu/gecos: GitHub Actions Runner/g' /etc/cloud/cloud.cfg",
-                "echo 'session required pam_env.so readenv=1' >> /etc/pam.d/sudo"
+                "sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin prohibit-password/g' /etc/ssh/sshd_config",
+                "cp -fv /home/ubuntu/.ssh/authorized_keys /root/.ssh/"
             ],
             "environment_vars": [
                 "DEBIAN_FRONTEND=noninteractive"

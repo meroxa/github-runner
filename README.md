@@ -35,6 +35,21 @@ _**Docker image size:**_
 - _**Compressed: 19G+.**_
 - _**Uncompressed: 50G+.**_
 
+## systemd services
+
+There are three systemd units:
+1. `github-runner-install` - downloads and installs the latest version of the GitHub Runner. Wanted by `github-runner-config`.
+2. `github-runner-config` - configures the recently downloaded GitHub Runner. Wanted by `github-runner`.
+3. `github-runner` - Runs the recently installed and configured GitHub Runner.
+
+Each of the above services relies on a `/etc/github-runner-env` file for the runner configuration environment, as well as
+`/etc/environment` for the various hosted tools environment.
+
+## AWS AMI
+
+The AWS AMI also ships with systemd template units designed to support multiple runners. These look for environment files
+in `/etc/github-runner-env-%i`, where `%i` is the identifier used when instantiating the service. 
+
 ## Docker-in-Docker
 
 This Docker image is designed to run Docker-in-Docker as a non-root user, and therefore expects to use a mount `/var/run/docker.sock` 

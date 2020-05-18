@@ -1,0 +1,17 @@
+[Unit]
+Description=GitHub Actions Runner
+Wants=github-runner-config@%i.service
+After=github-runner-config@%i.service network.target
+
+[Service]
+User=runner
+EnvironmentFile=/etc/environment
+EnvironmentFile=/etc/github-runner-env-%i
+WorkingDirectory=/home/runner/actions-runner/%i
+ExecStart=/home/runner/actions-runner/%i/bin/runsvc.sh
+KillMode=process
+KillSignal=SIGTERM
+TimeoutStopSec=5min
+
+[Install]
+WantedBy=multi-user.target

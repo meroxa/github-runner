@@ -1,0 +1,14 @@
+[Unit]
+Description=GitHub Actions Runner Installer %i
+After=network.target
+
+[Service]
+Type=oneshot
+User=runner
+EnvironmentFile=/etc/environment
+EnvironmentFile=/etc/github-runner-env-%i
+WorkingDirectory=/home/runner
+ExecStart=/home/runner/actions-runner-install.sh %i
+
+[Install]
+WantedBy=multi-user.target

@@ -2,8 +2,18 @@
     "provisioners": [
         {
             "type": "file",
-            "source": "{{template_dir}}/etc/systemd/system",
+            "source": "{{template_dir}}/etc/systemd/system/github-runner.*",
             "destination": "/etc/systemd/system/"
+        },
+        {
+            "type": "file",
+            "source": "{{template_dir}}/etc/systemd/system/github-runner-config.*",
+            "destination": "/etc/systemd/system/"
+        },
+        {
+            "type": "file",
+            "source": "{{template_dir}}/actions-runner-install.sh",
+            "destination": "{{user `runner_home`}}/actions-runner-install.sh"
         },
         {
             "type": "file",
@@ -16,6 +26,7 @@
                 "chmod 0644 /etc/github-runner-env",
                 "chmod 0644 /etc/systemd/system/github*",
                 "chmod 0644 /etc/systemd/system/github-runner.service.d/docker-override.conf",
+                "chmod 0700 \"$RUNNER_HOME/actions-runner-install.sh\"",
                 "chmod 0700 \"$RUNNER_HOME/actions-runner-config.sh\""
             ],
             "environment_vars": [
@@ -27,8 +38,7 @@
             "type": "shell",
             "scripts": [
                 "{{template_dir}}/scripts/installers/awspowershell.sh",
-                "{{template_dir}}/scripts/installers/auto.sh",
-                "{{template_dir}}/scripts/installers/actions-runner.sh"
+                "{{template_dir}}/scripts/installers/auto.sh"
             ],
             "environment_vars": [
                 "METADATA_FILE={{user `metadata_file`}}",
@@ -37,6 +47,14 @@
                 "RUNNER_HOME={{user `runner_home`}}"
             ],
             "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "chown -R {{user `runner_user`}}:{{user `runner_user`}} /home/runner"
+            ],
+            "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
         }
+
     ]
 }
