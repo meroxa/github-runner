@@ -54,7 +54,8 @@
                 "useradd -u $RUNNER_UID -r -g $RUNNER_GID -md $RUNNER_HOME -s /bin/bash -c \"GitHub Actions Runner\" $RUNNER_USER",
                 "usermod -aG sudo $RUNNER_USER",
                 "echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers",
-                "echo 'session required pam_env.so readenv=1' >> /etc/pam.d/sudo"
+                "echo 'session required pam_env.so readenv=1' >> /etc/pam.d/sudo",
+                "echo \"resolvconf resolvconf/linkify-resolvconf boolean false\" | debconf-set-selections"
             ],
             "environment_vars": [
                 "DEBIAN_FRONTEND=noninteractive",
