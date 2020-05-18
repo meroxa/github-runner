@@ -2,12 +2,17 @@
     "provisioners": [
         {
             "type": "file",
-            "source": "{{template_dir}}/etc/systemd/system/github-runner.*",
+            "source": "{{template_dir}}/etc/systemd/system/github-runner.service",
             "destination": "/etc/systemd/system/"
         },
         {
             "type": "file",
-            "source": "{{template_dir}}/etc/systemd/system/github-runner-config.*",
+            "source": "{{template_dir}}/etc/systemd/system/github-runner.service.d",
+            "destination": "/etc/systemd/system/"
+        },
+        {
+            "type": "file",
+            "source": "{{template_dir}}/etc/systemd/system/github-runner-config.service",
             "destination": "/etc/systemd/system/"
         },
         {
