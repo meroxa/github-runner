@@ -23,11 +23,29 @@
         {
             "type": "shell",
             "inline": [
+                "chown root:root /etc/github-runner-env",
                 "chmod 0644 /etc/github-runner-env",
+                "chown -R root:root /etc/systemd/system/github*",
                 "chmod 0644 /etc/systemd/system/github*",
                 "chmod 0644 /etc/systemd/system/github-runner.service.d/docker-override.conf",
-                "chmod 0700 \"$RUNNER_HOME/actions-runner-install.sh\"",
-                "chmod 0700 \"$RUNNER_HOME/actions-runner-config.sh\""
+                "chmod 0755 \"$RUNNER_HOME/actions-runner-install.sh\"",
+                "chmod 0755 \"$RUNNER_HOME/actions-runner-config.sh\""
+            ],
+            "environment_vars": [
+                "RUNNER_HOME={{user `runner_home`}}"
+            ],
+            "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "rm -fv \"$RUNNER_HOME/*.tar.gz\"",
+                "rm -fv \"$RUNNER_HOME/*.tar.bz2\"",
+                "rm -fv \"$RUNNER_HOME/*.deb\"",
+                "rm -fv \"$RUNNER_HOME/null\"",
+                "rm -fv \"$RUNNER_HOME/Release.key\"",
+                "rm -fv \"$RUNNER_HOME/install.sh\"",
+                "rm -frv \"$RUNNER_HOME/azcopy\""
             ],
             "environment_vars": [
                 "RUNNER_HOME={{user `runner_home`}}"

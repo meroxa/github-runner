@@ -69,7 +69,16 @@
                 "chown root:root /etc/systemd/system/github*",
                 "chmod 0755 \"$RUNNER_HOME/actions-runner-install.sh\"",
                 "chmod 0755 \"$RUNNER_HOME/actions-runner-config.sh\"",
-                "chown root:root /etc/hosts",
+                "chown root:root /etc/hosts"
+            ],
+            "environment_vars": [
+                "RUNNER_HOME={{user `runner_home`}}"
+            ],
+            "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+        },
+        {
+            "type": "shell",
+            "inline": [
                 "rm -fv \"$RUNNER_HOME/*.tar.gz\"",
                 "rm -fv \"$RUNNER_HOME/*.tar.bz2\"",
                 "rm -fv \"$RUNNER_HOME/*.deb\"",
@@ -100,7 +109,8 @@
         {
             "type": "shell",
             "inline": [
-                "chown -R {{user `runner_user`}}:{{user `runner_user`}} {{user `runner_home`}}"
+                "chown -R {{user `runner_user`}}:{{user `runner_user`}} {{user `runner_home`}}",
+                "usermod -aG docker {{user `runner_user`}}"
             ],
             "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
         }
