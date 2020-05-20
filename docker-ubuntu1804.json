@@ -45,6 +45,7 @@
                 "-i",
                 "-t",
                 "--cap-add=SYS_ADMIN",
+                "--security-opt=apparmor=unconfined",
                 "--device=/dev/fuse",
                 "{{.Image}}"
             ],
