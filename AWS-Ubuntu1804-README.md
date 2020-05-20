@@ -3,12 +3,12 @@
 The following software is installed on machines with the dev update.
 ***
 - Homebrew on Linux (Homebrew 2.2.17
-Homebrew/linuxbrew-core (git revision aef5a8; last commit 2020-05-18))
+Homebrew/linuxbrew-core (git revision 9ff33; last commit 2020-05-19))
 - 7-Zip 16.02
 - Ansible (ansible 2.9.9)
 - AzCopy7 (available by azcopy alias) 7.3.0
 - AzCopy10 (available by azcopy10 alias) 10.4.3
-- Azure CLI (azure-cli                          2.5.1)
+- Azure CLI (azure-cli                          2.6.0)
 - Azure CLI (azure-devops                      0.18.0)
 - Basic CLI:
   - curl
@@ -40,7 +40,7 @@ Homebrew/linuxbrew-core (git revision aef5a8; last commit 2020-05-18))
   - gnupg2
   - lib32z1
 - Alibaba Cloud CLI (3.0.44)
-- AWS CLI (aws-cli/1.18.62 Python/2.7.17 Linux/4.15.0-1054-aws botocore/1.16.12)
+- AWS CLI (aws-cli/1.18.63 Python/2.7.17 Linux/4.15.0-1054-aws botocore/1.16.13)
 - build-essential
 - Clang 6.0 (6.0.0)
 - Clang 8 (8.0.0)
@@ -55,6 +55,7 @@ Target: x86_64-unknown-linux-gnu
 - Docker-Moby (Docker version 3.0.11+azure, build eb310fca49568dccd87c6136f774ef6fff2a1b51)
 - Docker-Buildx (0.3.1+azure)
 - .NET Core SDK:
+  - 3.1.300
   - 3.1.202
   - 3.1.201
   - 3.1.200
@@ -136,9 +137,9 @@ Target: x86_64-unknown-linux-gnu
 - Git (2.26.2)
 - Git Large File Storage (LFS) (2.11.0)
 - Hub CLI (2.14.2)
-- Google Chrome (Google Chrome 81.0.4044.138 )
-- ChromeDriver 81.0.4044.138 (8c6c7ba89cc9453625af54f11fd83179e23450fa-refs/branch-heads/4044@{#999}); Chrome Driver is available via CHROMEWEBDRIVER environment variable
-- Google Cloud SDK (292.0.0)
+- Google Chrome (Google Chrome 83.0.4103.61 )
+- ChromeDriver 83.0.4103.39 (ccbf011cb2d2b19b506d844400483861342c20cd-refs/branch-heads/4103@{#416}); Chrome Driver is available via CHROMEWEBDRIVER environment variable
+- Google Cloud SDK (293.0.0)
 - Haskell Cabal (cabal-install version 2.0.0.1
 compiled using version 2.0.1.1 of the Cabal library )
 - Haskell Cabal (cabal-install version 2.2.0.0
@@ -162,7 +163,7 @@ compiled using version 3.2.0.0 of the Cabal library )
 - GHC (The Glorious Glasgow Haskell Compilation System, version 8.10.1)
 - Haskell Stack (Version 2.3.1, Git revision de2a7b694f07de7e6cf17f8c92338c16286b2878 (8103 commits) x86_64 hpack-0.33.0)
 - Heroku (heroku/7.41.1 linux-x64 node-v12.16.2)
-- HHVM (HipHop VM 4.58.0 (rel))
+- HHVM (HipHop VM 4.58.1 (rel))
 - ImageMagick
 - AdoptOpenJDK:
   - 8 (openjdk version "1.8.0_252")
@@ -190,7 +191,7 @@ compiled using version 3.2.0.0 of the Cabal library )
 Local version: Unknown)
 - n (6.5.1)
 - Parcel (1.12.4)
-- TypeScript (Version 3.9.2)
+- TypeScript (Version 3.9.3)
 - Webpack (4.43.0)
 - Webpack CLI (3.3.11)
 - Yarn (1.22.4)
@@ -226,11 +227,11 @@ Local version: Unknown)
 - Packer (1.5.6)
 - Vcpkg 2020.02.04-unknownhash
 - Zeit Now CLI (19.0.1)
-- MongoDB on Linux (2020-05-18T23:16:39.301+0000 I  CONTROL  [initandlisten] db version v4.2.6
-2020-05-18T23:16:39.301+0000 I  CONTROL  [initandlisten] git version: 20364840b8f1af16917e4c23c1b5f5efd8b352f8
-2020-05-18T23:16:39.301+0000 I  CONTROL  [initandlisten] OpenSSL version: OpenSSL 1.1.1g  21 Apr 2020)
+- MongoDB on Linux (2020-05-20T05:14:24.541+0000 I  CONTROL  [initandlisten] db version v4.2.6
+2020-05-20T05:14:24.541+0000 I  CONTROL  [initandlisten] git version: 20364840b8f1af16917e4c23c1b5f5efd8b352f8
+2020-05-20T05:14:24.541+0000 I  CONTROL  [initandlisten] OpenSSL version: OpenSSL 1.1.1g  21 Apr 2020)
 - Haveged 1.9.1-6
-- AWS SAM CLI, version 0.49.0
+- AWS SAM CLI, version 0.50.0
 - Google Repository 58
 - Google Play services 49
 - Google APIs 24
@@ -292,6 +293,7 @@ Local version: Unknown)
 - Az Module (2.8.0)
 - Az Module (3.1.0)
 - Az Module (3.5.0)
+- Az Module (3.8.0)
 - Cached container images
   - jekyll/builder:latest (Digest: sha256:c5ef2f7a72c8ef31178da22743d2249e1cc5143464556dcf4fed671d050d11bc)
   - node:10 (Digest: sha256:0e2671bc0702132989b2b5142617d47c421bd304acd924fbff812370f6107db2)
@@ -340,4 +342,4 @@ Local version: Unknown)
   - 4.0.4.0
   - 4.0.2.0
   - 3.3.618.0
-- auto (v9.33.1)
+- auto (v9.34.0)
