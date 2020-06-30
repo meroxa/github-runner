@@ -69,10 +69,16 @@ if [ $# -eq 0 ]; then
     _ACCOUNT="$(echo "${_PATH}" | cut -d/ -f1)"
     _REPO="$(echo "${_PATH}" | cut -d/ -f2)"
 
+    REGISTRATION_URL="${URI}/repos/${_ACCOUNT}/${_REPO}/actions/runners/registration-token"
+    # If $RUNNER_REPOSITORY_URL does not have the /repo part, register an organization wide runner
+    if [ -z "${_REPO}" ]; then
+      REGISTRATION_URL="${URI}/orgs/${_ACCOUNT}/actions/runners/registration-token"
+    fi
+
     RUNNER_TOKEN="$(curl -XPOST -fsSL \
       -H "${AUTH_HEADER}" \
       -H "${API_HEADER}" \
-      "${URI}/repos/${_ACCOUNT}/${_REPO}/actions/runners/registration-token" |
+      "${REGISTRATION_URL}" |
       jq -r '.token')"
 
     # PREVENT ACCESS_TOKEN FROM LEAKING INTO THE ENVIRONMENT
