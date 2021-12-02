@@ -27,7 +27,7 @@
                 "most_recent": true
             },
             "instance_type": "m5.xlarge",
-            "ami_name": "github-runner-base-focal",
+            "ami_name": "root-focal",
             "force_deregister": true,
             "force_delete_snapshot": true,
             "ami_regions": [
@@ -35,7 +35,7 @@
                 "us-west-2"
             ],
             "tags": {
-                "Name": "github-runner-base-focal-{{isotime \"20060102150405\"}}",
+                "Name": "root-focal-{{isotime \"20060102150405\"}}",
                 "os": "ubuntu",
                 "source": "github-runner",
                 "service": "ci",

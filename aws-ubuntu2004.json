@@ -32,21 +32,21 @@
             "secret_key": "{{user `secret_key`}}",
             "ssh_keypair_name": "meroxa-aws-dev",
             "ssh_agent_auth": true,
-            "ssh_username": "ubuntu",
+            "ssh_username": "runner",
             "subnet_id": "{{user `subnet_id`}}",
             "source_ami_filter": {
                 "filters": {
                     "virtualization-type": "hvm",
-                    "name": "ubuntu/images/*ubuntu-focal-20.04-amd64-server-*",
+                    "name": "github-runner-base-focal",
                     "root-device-type": "ebs"
                 },
                 "owners": [
-                    "099720109477"
+                    "688288262914"
                 ],
                 "most_recent": true
             },
             "instance_type": "m5.xlarge",
-            "ami_name": "github-runner-base-focal",
+            "ami_name": "github-runner-focal",
             "force_deregister": true,
             "force_delete_snapshot": true,
             "ami_regions": [
@@ -54,7 +54,7 @@
                 "us-west-2"
             ],
             "tags": {
-                "Name": "github-runner-base-focal-{{isotime \"20060102150405\"}}",
+                "Name": "github-runner-focal-{{isotime \"20060102150405\"}}",
                 "os": "ubuntu",
                 "source": "github-runner",
                 "service": "ci",

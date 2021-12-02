@@ -14,16 +14,16 @@
             "secret_key": "{{user `secret_key`}}",
             "ssh_keypair_name": "meroxa-aws-dev",
             "ssh_agent_auth": true,
-            "ssh_username": "ubuntu",
+            "ssh_username": "root",
             "subnet_id": "{{user `subnet_id`}}",
             "source_ami_filter": {
                 "filters": {
                     "virtualization-type": "hvm",
-                    "name": "ubuntu/images/*ubuntu-focal-20.04-amd64-server-*",
+                    "name": "root-focal",
                     "root-device-type": "ebs"
                 },
                 "owners": [
-                    "099720109477"
+                    "688288262914"
                 ],
                 "most_recent": true
             },
@@ -52,6 +52,11 @@
         }
     ],
     "provisioners": [
+        {
+            "type": "file",
+            "source": "{{template_dir}}/etc/hosts",
+            "destination": "/etc/hosts"
+        },
         {
             "type": "shell",
             "inline": [
