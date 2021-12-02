@@ -50,8 +50,7 @@
             "force_deregister": true,
             "force_delete_snapshot": true,
             "ami_regions": [
-                "us-east-1",
-                "us-west-2"
+                "us-east-1"
             ],
             "tags": {
                 "Name": "github-runner-focal-{{isotime \"20060102150405\"}}",
