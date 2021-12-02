@@ -13,7 +13,7 @@
             "secret_key": "{{user `secret_key`}}",
             "ssh_keypair_name": "meroxa-aws-dev",
             "ssh_agent_auth": true,
-            "ssh_username": "root",
+            "ssh_username": "ubuntu",
             "subnet_id": "{{user `subnet_id`}}",
             "source_ami_filter": {
                 "filters": {
