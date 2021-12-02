@@ -2,7 +2,8 @@
     "variables": {
         "runner_user": "runner",
         "access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
-        "secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}"
+        "secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+        "subnet_id": "{{env `PACKER_SUBNET_ID`}}"
     },
     "builders": [
         {
@@ -14,7 +15,7 @@
             "ssh_keypair_name": "meroxa-aws-dev",
             "ssh_agent_auth": true,
             "ssh_username": "root",
-            "subnet_id": "{{env `PACKER_SUBNET_ID`}}",
+            "subnet_id": "{{user `subnet_id`}}",
             "source_ami_filter": {
                 "filters": {
                     "virtualization-type": "hvm",

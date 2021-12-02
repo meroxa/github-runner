@@ -15,7 +15,8 @@
         "image_os": "ubuntu20",
         "github_feed_token": "{{env `MEROXA_MACHINE`}}",
         "go_default": "1.17",
-        "go_versions": "1.16 1.17"
+        "go_versions": "1.16 1.17",
+        "subnet_id": "{{env `PACKER_SUBNET_ID`}}"
     },
     "sensitive-variables": [
         "access_key",
@@ -32,7 +33,7 @@
             "ssh_keypair_name": "meroxa-aws-dev",
             "ssh_agent_auth": true,
             "ssh_username": "root",
-            "subnet_id": "{{env `PACKER_SUBNET_ID`}}",
+            "subnet_id": "{{user `subnet_id`}}",
             "source_ami_filter": {
                 "filters": {
                     "virtualization-type": "hvm",
