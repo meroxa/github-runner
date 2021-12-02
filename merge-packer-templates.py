@@ -87,6 +87,8 @@ if __name__ == '__main__':
                                                and ('{{template_dir}}/scripts/base/reboot.sh'
                                                     in pr['scripts']
                                                     or '{{template_dir}}/scripts/installers/homebrew-validate.sh'
+                                                    in pr['scripts']
+                                                    or '{{template_dir}}/scripts/installers/configure-environment.sh'
                                                     in pr['scripts']))]
     target_template['provisioners'].pop()
 
