@@ -1,9 +1,27 @@
 {
     "variables": {
+        "vcs_ref": "",
         "runner_user": "runner",
+        "runner_home": "/home/runner",
         "access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
-        "secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}"
+        "secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+        "image_folder": "/imagegeneration",
+        "commit_file": "/imagegeneration/commit.txt",
+        "imagedata_file": "/imagegeneration/imagedata.json",
+        "metadata_file": "/imagegeneration/metadatafile",
+        "installer_script_folder": "/imagegeneration/installers",
+        "helper_script_folder": "/imagegeneration/helpers",
+        "image_version": "dev",
+        "image_os": "ubuntu20",
+        "github_feed_token": "{{env `MEROXA_MACHINE`}}",
+        "go_default": "1.17",
+        "go_versions": "1.16 1.17"
     },
+    "sensitive-variables": [
+        "access_key",
+        "secret_key",
+        "github_feed_token"
+    ],
     "builders": [
         {
             "name": "focal",
@@ -53,22 +71,15 @@
     ],
     "provisioners": [
         {
-            "type": "file",
-            "source": "{{template_dir}}/etc/hosts",
-            "destination": "/etc/hosts"
-        },
-        {
             "type": "shell",
             "inline": [
                 "echo 127.0.0.1 $(hostname) >> /etc/hosts",
-                "sed -i 's/disable_root: false/disable_root: true/g' /etc/cloud/cloud.cfg",
-                "usermod --login {{user `runner_user`}} --move-home --home /home/{{user `runner_user`}} ubuntu",
-                "groupmod --new-name {{user `runner_user`}} ubuntu",
-                "apt-get -y -o Dpkg::Options::=\"--force-confdef\" -o Dpkg::Options::=\"--force-confold\" dist-upgrade",
-                "sed -i 's/disable_root: true/disable_root: false/g' /etc/cloud/cloud.cfg",
-                "sed -i 's/name: ubuntu/name: {{user `runner_user`}}/g' /etc/cloud/cloud.cfg",
-                "sed -i 's/gecos: Ubuntu/gecos: GitHub Actions Runner/g' /etc/cloud/cloud.cfg",
-                "echo 'session required pam_env.so readenv=1' >> /etc/pam.d/sudo"
+                "apt-get update",
+                "apt-get -y install --no-install-recommends sudo apt-utils software-properties-common lsb-release rsync gosu",
+                "apt-get -y install --no-install-recommends wget curl libunwind8 dos2unix apt-transport-https ca-certificates",
+                "apt-get -y install --no-install-recommends git ruby ohai locales fuse squashfuse hugepages",
+                "locale-gen en_US.UTF-8",
+                "export LANG=en_US.UTF-8 | tee -a /etc/environment"
             ],
             "environment_vars": [
                 "DEBIAN_FRONTEND=noninteractive"
