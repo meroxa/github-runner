@@ -82,6 +82,9 @@ jobs:
           cp -frv etc aws-2004/
           cp -fv actions-runner-install.sh aws-2004/
           cp -fv actions-runner-config.sh aws-2004/
+      - name: Remove waagent config
+        run: |
+          sed -i '/waagent/ d' aws-2004/scripts/installers/configure-environment.sh
       - name: Merge packer templates
         run: |
           ./merge-packer-templates.py \
