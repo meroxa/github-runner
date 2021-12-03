@@ -35,8 +35,7 @@
         {
             "type": "shell",
             "scripts": [
-                "{{template_dir}}/scripts/installers/awspowershell.sh",
-                "{{template_dir}}/scripts/installers/auto.sh"
+                "{{template_dir}}/scripts/installers/awspowershell.sh"
             ],
             "environment_vars": [
                 "METADATA_FILE={{user `metadata_file`}}",
