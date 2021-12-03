@@ -92,7 +92,10 @@ if __name__ == '__main__':
                                                and ('{{template_dir}}/scripts/base/reboot.sh'
                                                     in pr['scripts']
                                                     or '{{template_dir}}/scripts/installers/homebrew-validate.sh'
-                                                    in pr['scripts']))]
+                                                    in pr['scripts']
+                                                    or '{{template_dir}}/scripts/installers/Install-PowerShellModules.ps1'
+                                                    in pr['scripts']
+                                                    ))]
     target_template['provisioners'].pop()
 
     json.dump(target_template, args.target_template_path, indent=4)
