@@ -66,7 +66,12 @@ if __name__ == '__main__':
         if 'scripts' in pr and replace_scripts is not None:
             pr['scripts'] = [r['replace'] if s == r['find'] else s for s in pr['scripts'] for r in replace_scripts]
         if 'inline' in pr:
-            pr['inline'] = [r['replace'] if s == r['find'] else s for s in pr['inline'] for r in replace_inline]
+            for s in pr['inline']:
+                for r in replace_inline:
+                    if s == r['find']:
+                        pr['inline'] = r['replace']
+                    else:
+                        continue
         if args.inject_env:
             if 'execute_command' in pr:
                 if not 'sudo' in pr['execute_command']:
