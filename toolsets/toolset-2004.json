@@ -158,9 +158,6 @@
             "zip"
         ]
     },
-    "brew": [
-        {"name": "zstd"}
-    ],
     "docker": {
         "images": [
             "moby/buildkit:latest",
@@ -179,24 +176,9 @@
             "g++-10"
         ]
     },
-    "gfortran": {
-        "versions": [
-            "gfortran-9",
-            "gfortran-10"
-        ]
-    },
-    "php": {
-        "versions": [
-            "8.0"
-        ]
-    },
     "rubygems": [
         {"name": "fastlane"}
     ],
-    "selenium": {
-        "version": "4",
-        "binary_name": "selenium-server"
-    },
     "node": {
         "default": "16"
     },
