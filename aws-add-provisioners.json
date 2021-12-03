@@ -34,12 +34,11 @@
         },
         {
             "type": "shell",
-            "scripts": [
-                "{{template_dir}}/scripts/installers/awspowershell.sh"
+            "inline": [
+                "Install-Module -Scope AllUsers -Name AWSPowerShell.NetCore -Force"
             ],
             "environment_vars": [
                 "METADATA_FILE={{user `metadata_file`}}",
-                "HELPER_SCRIPTS={{user `helper_script_folder`}}",
                 "DEBIAN_FRONTEND=noninteractive",
                 "RUNNER_HOME={{user `runner_home`}}"
             ],
