@@ -4,10 +4,6 @@
 ##  Desc:  Installs basic command line utilities and dev packages
 ################################################################################
 
-# Source the helpers for use with the script
-source $HELPER_SCRIPTS/document.sh
-source $HELPER_SCRIPTS/apt.sh
-
 set -e
 
 echo "Install dnsutils"
@@ -144,35 +140,3 @@ for cmd in curl file ftp jq netcat ssh parallel rsync shellcheck sudo telnet tim
         exit 1
     fi
 done
-
-# Document what was added to the image
-echo "Lastly, documenting what we added to the metadata file"
-DocumentInstalledItem "Basic CLI:"
-DocumentInstalledItemIndent "curl"
-DocumentInstalledItemIndent "dnsutils"
-DocumentInstalledItemIndent "file"
-DocumentInstalledItemIndent "ftp"
-DocumentInstalledItemIndent "iproute2"
-DocumentInstalledItemIndent "iputils-ping"
-DocumentInstalledItemIndent "jq"
-DocumentInstalledItemIndent "libcurl3"
-DocumentInstalledItemIndent "libgbm-dev"
-DocumentInstalledItemIndent "libicu55"
-DocumentInstalledItemIndent "libunwind8"
-DocumentInstalledItemIndent "locales"
-DocumentInstalledItemIndent "netcat"
-DocumentInstalledItemIndent "openssh-client"
-DocumentInstalledItemIndent "parallel"
-DocumentInstalledItemIndent "rsync"
-DocumentInstalledItemIndent "shellcheck"
-DocumentInstalledItemIndent "sudo"
-DocumentInstalledItemIndent "telnet"
-DocumentInstalledItemIndent "time"
-DocumentInstalledItemIndent "tzdata"
-DocumentInstalledItemIndent "unzip"
-DocumentInstalledItemIndent "upx"
-DocumentInstalledItemIndent "wget"
-DocumentInstalledItemIndent "zip"
-DocumentInstalledItemIndent "zstd"
-DocumentInstalledItemIndent "gnupg2"
-DocumentInstalledItemIndent "lib32z1"
