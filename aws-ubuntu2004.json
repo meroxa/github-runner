@@ -16,7 +16,8 @@
         "github_feed_token": "{{env `MEROXA_MACHINE`}}",
         "go_default": "1.17",
         "go_versions": "1.16 1.17",
-        "subnet_id": "{{env `PACKER_SUBNET_ID`}}"
+        "subnet_id": "{{env `PACKER_SUBNET_ID`}}",
+        "aws_account": "{{env `PACKER_AWS_ACCOUNT`}}"
     },
     "sensitive-variables": [
         "access_key",
@@ -41,7 +42,7 @@
                     "root-device-type": "ebs"
                 },
                 "owners": [
-                    "688288262914"
+                    "{{user `aws_account`}}"
                 ],
                 "most_recent": true
             },

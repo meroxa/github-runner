@@ -2,7 +2,8 @@
     "variables": {
         "access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
         "secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
-        "subnet_id": "{{env `PACKER_SUBNET_ID`}}"
+        "subnet_id": "{{env `PACKER_SUBNET_ID`}}",
+        "aws_account": "{{env `PACKER_AWS_ACCOUNT`}}"
     },
     "builders": [
         {
@@ -22,7 +23,7 @@
                     "root-device-type": "ebs"
                 },
                 "owners": [
-                    "099720109477"
+                    "{{user `aws_account`}}"
                 ],
                 "most_recent": true
             },
