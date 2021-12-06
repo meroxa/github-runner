@@ -65,7 +65,7 @@
                 "sed -i 's/disable_root: false/disable_root: true/g' /etc/cloud/cloud.cfg",
                 "usermod --login {{user `runner_user`}} --move-home --home /home/{{user `runner_user`}} ubuntu",
                 "groupmod --new-name {{user `runner_user`}} ubuntu",
-                "apt-get -y -o Dpkg::Options::=\"--force-confdef\" -o Dpkg::Options::=\"--force-confold\" dist-upgrade",
+                "apt-get -y -o Dpkg::Options::=\"--force-confdef\" -o Dpkg::Options::=\"--force-confold\" upgrade",
                 "sed -i 's/disable_root: true/disable_root: false/g' /etc/cloud/cloud.cfg",
                 "sed -i 's/name: ubuntu/name: {{user `runner_user`}}/g' /etc/cloud/cloud.cfg",
                 "sed -i 's/gecos: Ubuntu/gecos: GitHub Actions Runner/g' /etc/cloud/cloud.cfg",
