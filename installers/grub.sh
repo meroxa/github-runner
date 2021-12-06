@@ -6,5 +6,3 @@ sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=\"/GRUB_CMDLINE_LINUX_DEFAULT=\"systemd.uni
 
 update-initramfs -u -k all
 update-grub
-
-grub-install --no-floppy /dev/sda
