@@ -3,7 +3,8 @@
         "runner_user": "runner",
         "access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
         "secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
-        "subnet_id": "{{env `PACKER_SUBNET_ID`}}"
+        "subnet_id": "{{env `PACKER_SUBNET_ID`}}",
+        "aws_account": "{{env `PACKER_AWS_ACCOUNT`}}"
     },
     "builders": [
         {
@@ -12,7 +13,7 @@
             "type": "amazon-ebs",
             "access_key": "{{user `access_key`}}",
             "secret_key": "{{user `secret_key`}}",
-            "ssh_keypair_name": "meroxa-aws-prod",
+            "ssh_keypair_name": "meroxa-aws-ci",
             "ssh_agent_auth": true,
             "ssh_username": "root",
             "subnet_id": "{{user `subnet_id`}}",
@@ -23,7 +24,7 @@
                     "root-device-type": "ebs"
                 },
                 "owners": [
-                    "688288262914"
+                    "{{user `aws_account`}}"
                 ],
                 "most_recent": true
             },
@@ -44,7 +45,7 @@
             "launch_block_device_mappings": [
                 {
                     "device_name": "/dev/sda1",
-                    "volume_size": 75,
+                    "volume_size": 100,
                     "volume_type": "gp2",
                     "delete_on_termination": true
                 }
