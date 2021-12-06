@@ -18,6 +18,16 @@
         },
         {
             "type": "shell",
+            "scripts": [
+                "{{template_dir}}/scripts/installers/grub.sh"
+            ],
+            "environment_vars": [
+                "RUNNER_HOME={{user `runner_home`}}"
+            ],
+            "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+        },
+        {
+            "type": "shell",
             "inline": [
                 "rm -fv \"$RUNNER_HOME/*.tar.gz\"",
                 "rm -fv \"$RUNNER_HOME/*.tar.bz2\"",
