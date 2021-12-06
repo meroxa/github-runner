@@ -13,7 +13,7 @@
             "type": "amazon-ebs",
             "access_key": "{{user `access_key`}}",
             "secret_key": "{{user `secret_key`}}",
-            "ssh_keypair_name": "meroxa-aws-dev",
+            "ssh_keypair_name": "meroxa-aws-ci",
             "ssh_agent_auth": true,
             "ssh_username": "root",
             "subnet_id": "{{user `subnet_id`}}",
