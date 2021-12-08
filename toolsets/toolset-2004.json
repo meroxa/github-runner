@@ -161,7 +161,10 @@
     "docker": {
         "images": [
             "moby/buildkit:latest",
-            "ubuntu:20.04"
+            "ubuntu:20.04",
+            "namely/protoc-all:latest",
+            "gcr.io/k8s-minikube/storage-provisioner:v5",
+            "gcr.io/k8s-minikube/kicbase"
         ]
     },
     "pipx": [
