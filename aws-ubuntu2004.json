@@ -47,7 +47,7 @@
                 "most_recent": true
             },
             "instance_type": "m5.xlarge",
-            "ami_name": "github-runner-focal",
+            "ami_name": "github-runner-focal-{{strftime \"%m-%d-%Y_%H-%M\"}}",
             "force_deregister": true,
             "force_delete_snapshot": true,
             "ami_regions": [
