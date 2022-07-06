@@ -44,7 +44,7 @@ parser.add_argument('--target', '-t',
                     type=argparse.FileType('wt'),
                     help='The target packer template')
 
-if __name__ == '__main__':
+if __name__ == '__main__': # this line automatically invokes a function call
     args = parser.parse_args()
     target_template: Dict[str, Union[List[Any], Any]] = {}
     upstream_template = json.load(args.upstream_template_path)
