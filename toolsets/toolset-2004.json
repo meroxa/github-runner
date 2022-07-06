@@ -165,7 +165,27 @@
             "namely/protoc-all:latest",
             "gcr.io/k8s-minikube/storage-provisioner:v5",
             "gcr.io/k8s-minikube/kicbase:v0.0.31",
-            "gcr.io/k8s-minikube/kicbase:v0.0.29"
+            "gcr.io/google_containers/kube-registry-proxy:0.4",
+            "gcr.io/google_containers/pause:3.1",
+            "registry:2.7.1",
+            "meroxa/catalyst:latest",
+            "meroxa/conduit:latest",
+            "meroxa/funtime:latest",
+            "meroxa/kafka-connect:latest",
+            "meroxa/kafka-pixy:latest",
+            "meroxa/tricorder:latest",
+            "calico/node:v3.23.1",
+            "calico/apiserver:v3.23.1",
+            "calico/cni:v3.23.1",
+            "bitnami/kafka:3.0.0-debian-10-r97",
+            "bitnami/zookeeper:3.7.0-debian-10-r265",
+            "istio/operator:1.11.4",
+            "fluent/fluent-bit:1.6.10",
+            "k8s.gcr.io/kube-apiserver:v1.20.7",
+            "k8s.gcr.io/ingress-nginx/controller",
+            "quay.io/prometheus/prometheus:v2.34.0",
+            "quay.io/rhdevelopers/core-dns-patcher",
+            "ghcr.io/conduitio/conduit:latest-nightly"
 
         ]
     },
