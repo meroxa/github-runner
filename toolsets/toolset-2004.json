@@ -182,7 +182,7 @@
             "istio/operator:1.11.4",
             "fluent/fluent-bit:1.6.10",
             "k8s.gcr.io/kube-apiserver:v1.20.7",
-            "k8s.gcr.io/ingress-nginx/controller:v0.44.0",
+            "k8s.gcr.io/ingress-nginx/controller:v1.2.1",
             "quay.io/prometheus/prometheus:v2.34.0",
             "quay.io/rhdevelopers/core-dns-patcher",
             "ghcr.io/conduitio/conduit:latest-nightly"
